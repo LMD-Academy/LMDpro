@@ -28,6 +28,9 @@ export function PublicHeader() {
           <Button variant="ghost" asChild>
             <Link href="/docs">Documentations</Link>
           </Button>
+           <Button variant="ghost" asChild>
+            <Link href="/dev">For Developers</Link>
+          </Button>
         </nav>
         <div className="ml-auto flex items-center gap-4">
           <DropdownMenu>
@@ -48,7 +51,7 @@ export function PublicHeader() {
           </DropdownMenu>
           <Link
             href="/register"
-            className={cn(buttonVariants())}
+            className={cn(buttonVariants({ size: "lg" }))}
           >
             Get Started
           </Link>

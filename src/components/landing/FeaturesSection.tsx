@@ -1,4 +1,4 @@
-import { BrainCircuit, FileText, Video, BotIcon } from 'lucide-react';
+import { BrainCircuit, Building2, Video, BotIcon } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 
 const features = [
@@ -13,9 +13,9 @@ const features = [
     description: 'Automated 3D animated videos and course materials generated from research by our AI agents.',
   },
   {
-    icon: <FileText className="h-10 w-10 text-primary" />,
-    title: 'Intelligent Resume Builder',
-    description: 'Import your LinkedIn profile and let AI craft and optimize your resume as you complete courses.',
+    icon: <Building2 className="h-10 w-10 text-primary" />,
+    title: 'Enterprise & Academic Solutions',
+    description: 'Deploy LMDpro as a white-labeled learning platform for your organization, university, or startup.',
   },
   {
     icon: <BotIcon className="h-10 w-10 text-primary" />,
