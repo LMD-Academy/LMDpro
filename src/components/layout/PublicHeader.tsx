@@ -6,10 +6,36 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
-import { User } from 'lucide-react';
+import { User, ChevronDown, Bot } from 'lucide-react';
 import { ThemeToggle } from '@/components/shared/ThemeToggle';
 import { cn } from '@/lib/utils';
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from '@/components/ui/navigation-menu';
+
+const courses = [
+  {
+    title: 'AI for Business',
+    description: 'Understand how to leverage AI to drive business growth and innovation.',
+  },
+  {
+    title: 'Intro to Business & Management',
+    description: 'Learn the foundational principles of modern business and management.',
+  },
+  {
+    title: 'Agile Methodologies',
+    description: 'Master frameworks like Scrum and Kanban for adaptive project management.',
+  },
+];
+
 
 export function PublicHeader() {
   return (
@@ -19,9 +45,31 @@ export function PublicHeader() {
           <Logo />
         </div>
         <nav className="hidden items-center gap-2 sm:gap-4 md:flex">
-          <Button variant="ghost" asChild>
-            <Link href="/dashboard">Dashboard</Link>
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost">
+                Explore Courses <ChevronDown className="ml-2 h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-80">
+              {courses.map((course) => (
+                 <DropdownMenuItem key={course.title} asChild>
+                    <Link href="#" className="flex flex-col items-start whitespace-normal">
+                      <p className='font-semibold'>{course.title}</p>
+                      <p className='text-xs text-muted-foreground'>{course.description}</p>
+                    </Link>
+                </DropdownMenuItem>
+              ))}
+              <DropdownMenuSeparator/>
+               <DropdownMenuItem asChild>
+                 <Button className="w-full animated-gradient-button" size="sm" asChild>
+                    <Link href="#">
+                      <Bot className="mr-2"/> Can't find a course? Build it!
+                    </Link>
+                 </Button>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
           <Button variant="ghost" asChild>
             <Link href="/pricing">Pricing</Link>
           </Button>

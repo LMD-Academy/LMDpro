@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Search, Bell, User, Settings, LogOut, VenetianMask } from 'lucide-react';
+import { Search, Bell, User, Settings, LogOut, VenetianMask, LayoutDashboard } from 'lucide-react';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -46,18 +46,12 @@ export function DashboardHeader() {
         <Input
           type="search"
           placeholder="Search courses, docs..."
-          className="w-full rounded-lg bg-background pl-8 md:w-[250px] lg:w-[350px]"
+          className="w-full rounded-lg bg-background pl-8 md:w-[250px] lg:w-[450px]"
         />
       </div>
       <Button variant="ghost" size="icon" className="rounded-full">
         <Bell className="h-5 w-5" />
         <span className="sr-only">Toggle notifications</span>
-      </Button>
-      <Button variant="ghost" size="icon" className="rounded-full" asChild>
-        <Link href="#">
-            <Settings className="h-5 w-5" />
-            <span className="sr-only">Settings</span>
-        </Link>
       </Button>
       <div className="flex items-center gap-2">
         <Badge variant="outline">Premium</Badge>
@@ -80,6 +74,12 @@ export function DashboardHeader() {
               <p className="text-xs font-normal text-muted-foreground">user@example.com</p>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
+             <DropdownMenuItem asChild>
+              <Link href="/dashboard">
+                <LayoutDashboard className="mr-2 h-4 w-4" />
+                <span>Dashboard</span>
+              </Link>
+            </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link href="#">
                 <User className="mr-2 h-4 w-4" />
