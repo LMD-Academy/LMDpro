@@ -1,4 +1,3 @@
-
 'use client';
 
 import {
@@ -11,7 +10,7 @@ import {
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, BookCheck, Certificate, Sparkles } from 'lucide-react';
+import { ArrowRight, BookCheck, Award, Sparkles } from 'lucide-react';
 import {
   Pie,
   PieChart,
@@ -102,7 +101,7 @@ export default function DashboardPage() {
             <CardTitle className="text-sm font-medium">
               Completed Courses
             </CardTitle>
-            <Certificate className="h-4 w-4 text-muted-foreground" />
+            <Award className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">8</div>
