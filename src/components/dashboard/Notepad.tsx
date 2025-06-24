@@ -1,7 +1,7 @@
 'use client';
 
-import { Button } from "../ui/button";
-import { Textarea } from "../ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import { Download, FileText, Wand2 } from "lucide-react";
 
 export function Notepad() {

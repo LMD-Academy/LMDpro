@@ -1,14 +1,13 @@
-
 'use client';
 
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Bot, FileText, LifeBuoy } from 'lucide-react';
+import { Bot, LifeBuoy } from 'lucide-react';
 import { AiAssistant } from './AiAssistant';
 import { Notepad } from './Notepad';
 import Link from 'next/link';
-import { NotepadIcon } from '../icons/NotepadIcon';
+import { NotepadIcon } from '@/components/icons/NotepadIcon';
 
 const toolbarItems = [
   {

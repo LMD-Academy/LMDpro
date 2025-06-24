@@ -18,9 +18,9 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Search, Bell, User, Settings, LogOut, VenetianMask } from 'lucide-react';
-import { SidebarTrigger } from '../ui/sidebar';
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-import { Badge } from '../ui/badge';
+import { SidebarTrigger } from '@/components/ui/sidebar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 
 export function DashboardHeader() {
