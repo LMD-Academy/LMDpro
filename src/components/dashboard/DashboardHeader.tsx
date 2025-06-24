@@ -46,12 +46,18 @@ export function DashboardHeader() {
         <Input
           type="search"
           placeholder="Search courses, docs..."
-          className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[320px]"
+          className="w-full rounded-lg bg-background pl-8 md:w-[250px] lg:w-[350px]"
         />
       </div>
       <Button variant="ghost" size="icon" className="rounded-full">
         <Bell className="h-5 w-5" />
         <span className="sr-only">Toggle notifications</span>
+      </Button>
+      <Button variant="ghost" size="icon" className="rounded-full" asChild>
+        <Link href="#">
+            <Settings className="h-5 w-5" />
+            <span className="sr-only">Settings</span>
+        </Link>
       </Button>
       <div className="flex items-center gap-2">
         <Badge variant="outline">Premium</Badge>

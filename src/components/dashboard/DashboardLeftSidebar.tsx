@@ -15,8 +15,6 @@ import {
   LayoutDashboard,
   GraduationCap,
   FileText,
-  LifeBuoy,
-  Settings,
   LogOut,
   Library,
   BookOpenCheck,
@@ -31,11 +29,6 @@ const menuItems = [
   { href: '/resume', icon: FileText, label: 'Resume Builder' },
   { href: '/library', icon: Library, label: 'Academic Research' },
   { href: '/docs', icon: BookOpenCheck, label: 'Documentations' },
-];
-
-const helpMenuItems = [
-  { href: '/help', icon: LifeBuoy, label: 'Help & Support' },
-  { href: '#', icon: Settings, label: 'Settings' },
 ];
 
 export function DashboardLeftSidebar() {
@@ -68,21 +61,6 @@ export function DashboardLeftSidebar() {
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
-          {helpMenuItems.map((item) => (
-            <SidebarMenuItem key={item.label}>
-              <SidebarMenuButton
-                href={item.href}
-                asChild
-                tooltip={item.label}
-                isActive={pathname === item.href}
-              >
-                <Link href={item.href}>
-                  <item.icon />
-                  <span>{item.label}</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
           <SidebarMenuItem>
             <SidebarMenuButton href="/" asChild tooltip="Logout">
               <Link href="/">

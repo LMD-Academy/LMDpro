@@ -3,9 +3,10 @@
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Bot, Contact, FileText, MessageCircleQuestion } from 'lucide-react';
+import { Bot, FileText, LifeBuoy } from 'lucide-react';
 import { AiAssistant } from './AiAssistant';
 import { Notepad } from './Notepad';
+import Link from 'next/link';
 
 const toolbarItems = [
   {
@@ -21,15 +22,26 @@ const toolbarItems = [
     popoverWidth: 'w-[320px] h-[500px]',
   },
   {
-    icon: MessageCircleQuestion,
-    label: 'FAQ & Docs',
-    content: <div className="p-4 text-sm">FAQ & Docs content goes here. The full documentation page can provide more detailed information.</div>,
-    popoverWidth: 'w-[320px]',
-  },
-  {
-    icon: Contact,
-    label: 'Contact Us',
-    content: <div className="p-4 text-sm">Contact Us form goes here. For urgent matters, please use the support page.</div>,
+    icon: LifeBuoy,
+    label: 'Help & Support',
+    content: (
+      <div className="flex flex-col h-full bg-card">
+        <div className="p-4 border-b">
+          <h3 className="font-semibold text-lg flex items-center gap-2">
+            <LifeBuoy size={20} /> Help & Support
+          </h3>
+        </div>
+        <div className="p-4 text-center flex-1 flex flex-col justify-center items-center">
+          <p className="text-sm text-muted-foreground mb-4">
+            Need assistance? Visit our full support center for FAQs,
+            documentation, and contact options.
+          </p>
+          <Button asChild>
+            <Link href="/help">Open Full Support Page</Link>
+          </Button>
+        </div>
+      </div>
+    ),
     popoverWidth: 'w-[320px]',
   },
 ];
