@@ -168,7 +168,7 @@ const Sidebar = React.forwardRef<
     },
     ref
   ) => {
-    const { isMobile, state, openMobile, setOpenMobile, open } = useSidebar()
+    const { isMobile, state, openMobile, setOpenMobile, setOpen } = useSidebar()
     
     if (isMobile) {
       return (
