@@ -43,6 +43,7 @@ export async function intelligentResumeBuilding(
 
 const prompt = ai.definePrompt({
   name: 'intelligentResumeBuildingPrompt',
+  model: 'googleai/gemini-2.0-flash',
   input: {schema: IntelligentResumeBuildingInputSchema},
   output: {schema: IntelligentResumeBuildingOutputSchema},
   prompt: `You are an AI resume expert. You will take the LinkedIn profile data and a list of skills and generate a resume description and a list of industry-standard keywords optimized for the resume.
