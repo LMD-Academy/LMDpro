@@ -90,6 +90,13 @@
   animation: animated-gradient 5s ease-in-out infinite;
 }
 
+.animated-gradient-button {
+  background: linear-gradient(45deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary)));
+  background-size: 200% 200%;
+  animation: animated-gradient 5s ease-in-out infinite;
+  border: none;
+}
+
 .paper-cut-box {
   @apply border-2 border-primary/20 bg-card p-6 shadow-lg transition-all duration-300;
   box-shadow: 5px 5px 0px 0px hsl(var(--primary));
