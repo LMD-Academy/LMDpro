@@ -21,14 +21,10 @@ import {
   LogOut,
   Library,
   BookOpenCheck,
-  PanelLeftClose,
-  PanelLeftOpen,
 } from 'lucide-react';
 import { Logo } from '../shared/Logo';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Switch } from '../ui/switch';
-import { Label } from '../ui/label';
 
 const menuItems = [
   { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
@@ -44,21 +40,13 @@ const helpMenuItems = [
 ];
 
 export function DashboardLeftSidebar() {
-  const { state, setOpen } = useSidebar();
+  const { state } = useSidebar();
   const pathname = usePathname();
 
   return (
     <Sidebar>
       <SidebarHeader className="flex items-center justify-between p-2">
         <Logo showText={state === 'expanded'} />
-        <SidebarMenuButton
-          onClick={() => setOpen(false)}
-          className="hidden h-7 w-7 md:flex group-data-[state=collapsed]:hidden"
-          variant="ghost"
-          size="icon"
-        >
-          <PanelLeftClose />
-        </SidebarMenuButton>
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
@@ -80,10 +68,6 @@ export function DashboardLeftSidebar() {
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter>
-        <div className="flex items-center justify-between p-3 group-data-[state=collapsed]:hidden">
-            <Label htmlFor="pin-sidebar">Pin sidebar</Label>
-            <Switch id="pin-sidebar" checked={state === 'expanded'} onCheckedChange={() => setOpen(state === 'collapsed')} />
-        </div>
         <div className='h-px w-full bg-border group-data-[state=expanded]:hidden'/>
         <div className="p-2 flex items-center gap-2">
           <Avatar className="h-9 w-9">

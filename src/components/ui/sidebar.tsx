@@ -3,7 +3,7 @@
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { VariantProps, cva } from "class-variance-authority"
-import { PanelLeft, PanelLeftClose } from "lucide-react"
+import { PanelLeft, PanelLeftClose, PanelLeftOpen } from "lucide-react"
 
 import { useIsMobile } from "@/hooks/use-mobile"
 import { cn } from "@/lib/utils"
@@ -169,7 +169,7 @@ const Sidebar = React.forwardRef<
     },
     ref
   ) => {
-    const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
+    const { isMobile, state, openMobile, setOpenMobile, setOpen } = useSidebar()
     
     if (isMobile) {
       return (
@@ -194,7 +194,7 @@ const Sidebar = React.forwardRef<
     return (
       <div
         ref={ref}
-        className={cn("fixed top-0 left-0 h-full z-30 bg-card border-r transition-all duration-300 ease-in-out", 
+        className={cn("fixed top-0 left-0 h-full z-30 bg-card border-r transition-all duration-300 ease-in-out relative", 
             state === 'expanded' ? 'w-[--sidebar-width]' : 'w-[--sidebar-width-icon]',
             className
         )}
@@ -207,6 +207,14 @@ const Sidebar = React.forwardRef<
         >
           {children}
         </div>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute top-[calc(50%-1rem)] -right-4 h-8 w-8 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 hidden md:flex"
+          onClick={() => setOpen(state === 'collapsed')}
+        >
+          {state === 'expanded' ? <PanelLeftClose /> : <PanelLeftOpen />}
+        </Button>
       </div>
     )
   }
