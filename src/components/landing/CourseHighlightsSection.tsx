@@ -36,22 +36,20 @@ export function CourseHighlightsSection() {
       </div>
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
         {courses.map((course) => (
-          <Card key={course.title} className="overflow-hidden transition-transform hover:scale-105">
-            <CardContent className="p-6">
-              <div className="flex justify-end mb-4">
+          <div key={course.title} className="paper-cut-box">
+             <div className="flex justify-end mb-4">
                 {course.badge && <Badge>{course.badge}</Badge>}
               </div>
-              <CardTitle>{course.title}</CardTitle>
-              <CardDescription className="mt-2">{course.description}</CardDescription>
-            </CardContent>
-            <CardFooter className="p-6 pt-0">
-              <Button asChild className="w-full">
-                <Link href="#">
-                  Learn More <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-            </CardFooter>
-          </Card>
+              <h3 className="text-xl font-bold">{course.title}</h3>
+              <p className="mt-2 text-muted-foreground">{course.description}</p>
+              <div className="mt-6">
+                <Button asChild className="w-full">
+                    <Link href="#">
+                    Learn More <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                </Button>
+              </div>
+          </div>
         ))}
       </div>
     </section>

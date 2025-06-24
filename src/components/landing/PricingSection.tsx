@@ -50,31 +50,31 @@ export function PricingSection() {
       </div>
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
         {tiers.map((tier) => (
-          <Card key={tier.name} className={`flex flex-col ${tier.popular ? 'border-primary ring-2 ring-primary' : ''}`}>
-            <CardHeader>
-              <CardTitle>{tier.name}</CardTitle>
-              <CardDescription>{tier.description}</CardDescription>
-              <div>
-                <span className="text-4xl font-bold">{tier.price}</span>
-                <span className="text-muted-foreground">{tier.frequency}</span>
-              </div>
-            </CardHeader>
-            <CardContent className="flex-1">
-              <ul className="space-y-3">
-                {tier.features.map((feature) => (
-                  <li key={feature} className="flex items-center">
-                    <Check className="mr-2 h-5 w-5 text-primary" />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-            <CardFooter>
-              <Button asChild className="w-full" variant={tier.popular ? 'default' : 'outline'}>
-                <Link href={tier.href}>{tier.cta}</Link>
-              </Button>
-            </CardFooter>
-          </Card>
+          <div key={tier.name} className={`flex flex-col paper-cut-box ${tier.popular ? 'border-primary ring-2 ring-primary !shadow-accent' : ''}`}>
+              <CardHeader className='p-0 pb-6'>
+                <CardTitle>{tier.name}</CardTitle>
+                <CardDescription>{tier.description}</CardDescription>
+                <div>
+                  <span className="text-4xl font-bold">{tier.price}</span>
+                  <span className="text-muted-foreground">{tier.frequency}</span>
+                </div>
+              </CardHeader>
+              <CardContent className="flex-1 p-0">
+                <ul className="space-y-3">
+                  {tier.features.map((feature) => (
+                    <li key={feature} className="flex items-center">
+                      <Check className="mr-2 h-5 w-5 text-primary" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+              <CardFooter className='p-0 pt-6'>
+                <Button asChild className="w-full" variant={tier.popular ? 'default' : 'outline'}>
+                  <Link href={tier.href}>{tier.cta}</Link>
+                </Button>
+              </CardFooter>
+          </div>
         ))}
       </div>
     </section>

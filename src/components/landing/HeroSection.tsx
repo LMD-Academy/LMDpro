@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export function HeroSection() {
   return (
-    <section className="relative h-[80vh] min-h-[500px] w-full">
+    <section className="w-full h-screen">
       <div className="container flex h-full flex-col items-center justify-center text-center">
         <div className="mb-4 rounded-full border bg-card/50 px-4 py-1.5 text-sm shadow-md backdrop-blur-sm">
           <span className="font-medium text-primary">New!</span> The future of

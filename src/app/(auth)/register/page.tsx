@@ -76,14 +76,14 @@ export default function RegisterPage() {
             <CardHeader>
               <CardTitle>Admin / IAM Registration</CardTitle>
               <CardDescription>
-                Contact sales to create an administrative account.
+                Contact sales to create an administrative account for your team.
               </CardDescription>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
                 For security reasons, administrator accounts cannot be created
                 through this public form. Please contact our sales team to set
-                up your organization&apos;s IAM console.
+                up your organization&apos;s IAM console and get your team started.
               </p>
             </CardContent>
             <CardFooter>

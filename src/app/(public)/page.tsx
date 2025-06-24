@@ -2,7 +2,6 @@ import { CourseHighlightsSection } from '@/components/landing/CourseHighlightsSe
 import { FeaturesSection } from '@/components/landing/FeaturesSection';
 import { HeroSection } from '@/components/landing/HeroSection';
 import { PricingSection } from '@/components/landing/PricingSection';
-import { TestimonialsSection } from '@/components/landing/TestimonialsSection';
 
 export default function HomePage() {
   return (
@@ -13,7 +12,6 @@ export default function HomePage() {
           <FeaturesSection />
           <CourseHighlightsSection />
           <PricingSection />
-          <TestimonialsSection />
         </div>
       </div>
     </>

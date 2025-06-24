@@ -19,36 +19,46 @@ import {
   LifeBuoy,
   Settings,
   LogOut,
-  User,
+  Library,
+  BookOpenCheck,
+  PanelLeftClose,
+  PanelLeftOpen,
 } from 'lucide-react';
 import { Logo } from '../shared/Logo';
 import Link from 'next/link';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '../ui/dropdown-menu';
+import { usePathname } from 'next/navigation';
+import { Switch } from '../ui/switch';
+import { Label } from '../ui/label';
 
 const menuItems = [
   { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-  { href: '#', icon: GraduationCap, label: 'My Courses' },
-  { href: '#', icon: FileText, label: 'Resume' },
+  { href: '/courses', icon: GraduationCap, label: 'Course Catalog' },
+  { href: '/resume', icon: FileText, label: 'Resume Builder' },
+  { href: '/library', icon: Library, label: 'Academic Research' },
+  { href: '/docs', icon: BookOpenCheck, label: 'Documentations' },
 ];
 
 const helpMenuItems = [
-  { href: '#', icon: LifeBuoy, label: 'Support' },
+  { href: '/help', icon: LifeBuoy, label: 'Help & Support' },
   { href: '#', icon: Settings, label: 'Settings' },
 ];
 
 export function DashboardLeftSidebar() {
-  const { state } = useSidebar();
+  const { state, setOpen } = useSidebar();
+  const pathname = usePathname();
+
   return (
     <Sidebar>
-      <SidebarHeader>
+      <SidebarHeader className="flex items-center justify-between p-2">
         <Logo showText={state === 'expanded'} />
+        <SidebarMenuButton
+          onClick={() => setOpen(false)}
+          className="hidden h-7 w-7 md:flex group-data-[state=collapsed]:hidden"
+          variant="ghost"
+          size="icon"
+        >
+          <PanelLeftClose />
+        </SidebarMenuButton>
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
@@ -58,7 +68,7 @@ export function DashboardLeftSidebar() {
                 href={item.href}
                 asChild
                 tooltip={item.label}
-                isActive={item.href === '/dashboard'}
+                isActive={pathname === item.href}
               >
                 <Link href={item.href}>
                   <item.icon />
@@ -70,73 +80,32 @@ export function DashboardLeftSidebar() {
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter>
-        <SidebarMenu>
-          {helpMenuItems.map((item) => (
-            <SidebarMenuItem key={item.label}>
-              <SidebarMenuButton href={item.href} asChild tooltip={item.label}>
-                <Link href={item.href}>
-                  <item.icon />
-                  <span>{item.label}</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
-          <SidebarMenuItem>
-            {state === 'collapsed' ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" asChild className="h-10 w-10 rounded-full p-0">
-                     <Avatar className="h-9 w-9">
-                      <AvatarImage
-                        src="https://placehold.co/100x100.png"
-                        alt="User"
-                        data-ai-hint="user avatar"
-                      />
-                      <AvatarFallback>U</AvatarFallback>
-                    </Avatar>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent side="right" align="start">
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>
-                    <User className="mr-2 h-4 w-4" />
-                    <span>Profile</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Settings className="mr-2 h-4 w-4" />
-                    <span>Settings</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>
-                    <LogOut className="mr-2 h-4 w-4" />
-                    <span>Log out</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-              <div className="flex items-center gap-3 px-2">
-                <Avatar className="h-9 w-9">
-                  <AvatarImage
-                    src="https://placehold.co/100x100.png"
-                    alt="User"
-                    data-ai-hint="user avatar"
-                  />
-                  <AvatarFallback>U</AvatarFallback>
-                </Avatar>
-                <div className="flex-1 truncate">
-                  <p className="truncate text-sm font-semibold">User Name</p>
-                  <p className="truncate text-xs text-muted-foreground">
-                    user@example.com
-                  </p>
-                </div>
-                <Button variant="ghost" size="icon" className="h-6 w-6">
-                  <LogOut className="h-4 w-4" />
-                </Button>
-              </div>
-            )}
-          </SidebarMenuItem>
-        </SidebarMenu>
+        <div className="flex items-center justify-between p-3 group-data-[state=collapsed]:hidden">
+            <Label htmlFor="pin-sidebar">Pin sidebar</Label>
+            <Switch id="pin-sidebar" checked={state === 'expanded'} onCheckedChange={() => setOpen(state === 'collapsed')} />
+        </div>
+        <div className='h-px w-full bg-border group-data-[state=expanded]:hidden'/>
+        <div className="p-2 flex items-center gap-2">
+          <Avatar className="h-9 w-9">
+            <AvatarImage
+              src="https://placehold.co/100x100.png"
+              alt="User"
+              data-ai-hint="user avatar"
+            />
+            <AvatarFallback>U</AvatarFallback>
+          </Avatar>
+          <div className="flex-1 truncate group-data-[state=collapsed]:hidden">
+            <p className="truncate text-sm font-semibold">User Name</p>
+            <p className="truncate text-xs text-muted-foreground">
+              user@example.com
+            </p>
+          </div>
+          <Button variant="ghost" size="icon" className="h-6 w-6 group-data-[state=collapsed]:hidden" asChild>
+            <Link href="/">
+                <LogOut className="h-4 w-4" />
+            </Link>
+          </Button>
+        </div>
       </SidebarFooter>
     </Sidebar>
   );

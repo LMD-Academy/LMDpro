@@ -95,7 +95,7 @@ export default function LoginPage() {
             </CardContent>
             <CardFooter>
               <Button className="w-full" asChild>
-                <Link href="/dashboard">Login</Link>
+                <Link href="/iam">Login to IAM</Link>
               </Button>
             </CardFooter>
           </Card>
