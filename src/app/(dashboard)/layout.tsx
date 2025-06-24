@@ -10,12 +10,12 @@ export default function DashboardLayout({
 }) {
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen bg-background">
+      <div className="group/layout min-h-screen bg-background">
         <DashboardLeftSidebar />
-        <div className="flex flex-1 flex-col">
+        <div className="pr-[56px] transition-all duration-300 ease-in-out group-data-[sidebar-state=collapsed]/sidebar-wrapper:pl-[var(--sidebar-width-icon)] group-data-[sidebar-state=expanded]/sidebar-wrapper:pl-[var(--sidebar-width)]">
           <DashboardHeader />
-          <main className="flex-1 overflow-y-auto">
-            <div className="pr-[280px]">{children}</div>
+          <main className="p-4 sm:p-6 lg:p-8">
+            {children}
           </main>
         </div>
         <DashboardRightSidebar />

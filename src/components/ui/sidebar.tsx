@@ -140,6 +140,7 @@ const SidebarProvider = React.forwardRef<
                 ...style,
               } as React.CSSProperties
             }
+            data-sidebar-state={state}
             className={cn(
               "group/sidebar-wrapper",
               className
@@ -168,7 +169,7 @@ const Sidebar = React.forwardRef<
     },
     ref
   ) => {
-    const { isMobile, state, openMobile, setOpenMobile, setOpen } = useSidebar()
+    const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
     
     if (isMobile) {
       return (
@@ -193,8 +194,6 @@ const Sidebar = React.forwardRef<
     return (
       <div
         ref={ref}
-        onMouseEnter={() => setOpen(true)}
-        onMouseLeave={() => setOpen(false)}
         className={cn("fixed top-0 left-0 h-full z-30 bg-card border-r transition-all duration-300 ease-in-out", 
             state === 'expanded' ? 'w-[--sidebar-width]' : 'w-[--sidebar-width-icon]',
             className
