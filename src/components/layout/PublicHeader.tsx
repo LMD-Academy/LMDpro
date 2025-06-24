@@ -30,7 +30,6 @@ export function PublicHeader() {
           </Button>
         </nav>
         <div className="ml-auto flex items-center gap-4">
-          <ThemeToggle />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="rounded-full">
@@ -49,13 +48,11 @@ export function PublicHeader() {
           </DropdownMenu>
           <Link
             href="/register"
-            className={cn(
-              buttonVariants(),
-              'animated-gradient-button font-semibold text-primary-foreground'
-            )}
+            className={cn(buttonVariants())}
           >
             Get Started
           </Link>
+          <ThemeToggle />
         </div>
       </div>
     </header>
