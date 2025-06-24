@@ -1,7 +1,6 @@
 'use client';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
 import {
   Sidebar,
   SidebarContent,
@@ -68,7 +67,34 @@ export function DashboardLeftSidebar() {
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter>
-        <div className='h-px w-full bg-border group-data-[state=expanded]:hidden'/>
+        <SidebarMenu>
+          {helpMenuItems.map((item) => (
+            <SidebarMenuItem key={item.label}>
+              <SidebarMenuButton
+                href={item.href}
+                asChild
+                tooltip={item.label}
+                isActive={pathname === item.href}
+              >
+                <Link href={item.href}>
+                  <item.icon />
+                  <span>{item.label}</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
+          <SidebarMenuItem>
+            <SidebarMenuButton href="/" asChild tooltip="Logout">
+              <Link href="/">
+                <LogOut />
+                <span>Logout</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+
+        <div className="h-px w-full bg-border" />
+
         <div className="p-2 flex items-center gap-2">
           <Avatar className="h-9 w-9">
             <AvatarImage
@@ -84,11 +110,6 @@ export function DashboardLeftSidebar() {
               user@example.com
             </p>
           </div>
-          <Button variant="ghost" size="icon" className="h-6 w-6 group-data-[state=collapsed]:hidden" asChild>
-            <Link href="/">
-                <LogOut className="h-4 w-4" />
-            </Link>
-          </Button>
         </div>
       </SidebarFooter>
     </Sidebar>

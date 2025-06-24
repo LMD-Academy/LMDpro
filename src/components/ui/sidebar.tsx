@@ -210,7 +210,7 @@ const Sidebar = React.forwardRef<
         <Button
           variant="ghost"
           size="icon"
-          className="absolute top-[calc(50%-1rem)] -right-4 h-8 w-8 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 hidden md:flex"
+          className="absolute bottom-[33.33%] -right-4 h-8 w-8 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 hidden md:flex"
           onClick={() => setOpen(state === 'collapsed')}
         >
           {state === 'expanded' ? <PanelLeftClose /> : <PanelLeftOpen />}
