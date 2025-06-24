@@ -1,18 +1,23 @@
 
 'use client';
 
+import React from 'react';
+import { useParams } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
-import { ChevronLeft, ChevronRight, FileQuestion, MessageSquare, BookOpen } from "lucide-react";
-import Image from 'next/image';
+import { ChevronLeft, ChevronRight, FileQuestion, BookOpen } from "lucide-react";
 
 // This is a placeholder page. In a real app, you'd fetch module content based on the slug.
-export default function ModulePage({ params }: { params: { slug: string } }) {
+export default function ModulePage() {
+  const params = useParams();
+  // The slug can be a string or string array, so we handle that.
+  const slug = Array.isArray(params.slug) ? params.slug.join('/') : params.slug || '';
+
   const { toast } = useToast();
   
-  const formattedTitle = params.slug
+  const formattedTitle = slug
     .split('-')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
