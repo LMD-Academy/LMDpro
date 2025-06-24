@@ -1,6 +1,5 @@
 'use client';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   Sidebar,
   SidebarContent,
@@ -70,25 +69,6 @@ export function DashboardLeftSidebar() {
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
-
-        <div className="h-px w-full bg-border" />
-
-        <div className="p-2 flex items-center gap-2">
-          <Avatar className="h-9 w-9">
-            <AvatarImage
-              src="https://placehold.co/100x100.png"
-              alt="User"
-              data-ai-hint="user avatar"
-            />
-            <AvatarFallback>U</AvatarFallback>
-          </Avatar>
-          <div className="flex-1 truncate group-data-[state=collapsed]:hidden">
-            <p className="truncate text-sm font-semibold">User Name</p>
-            <p className="truncate text-xs text-muted-foreground">
-              user@example.com
-            </p>
-          </div>
-        </div>
       </SidebarFooter>
     </Sidebar>
   );
