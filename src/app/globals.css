@@ -71,14 +71,16 @@
   }
 }
 
-.animated-gradient-bg-dark {
-  background: linear-gradient(45deg, #202632, #3b3b3b, #262a36, #3b3b3b);
+.public-layout-bg {
+  /* Lighter gradient for light theme */
+  background: linear-gradient(45deg, #f0f8ff, #e6e6fa, #fdf5e6, #fafad2);
   background-size: 300% 300%;
   animation: animated-gradient 20s ease infinite;
 }
 
-.animated-gradient-bg-light {
-  background: linear-gradient(45deg, #5fd8ce, #db60cc, #ff7590, #db60cc);
+.dark .public-layout-bg {
+  /* Original dark gradient for dark theme */
+  background: linear-gradient(45deg, #202632, #3b3b3b, #262a36, #3b3b3b);
   background-size: 300% 300%;
   animation: animated-gradient 20s ease infinite;
 }
