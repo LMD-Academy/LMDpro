@@ -63,7 +63,9 @@ export default function LoginPage() {
               </div>
             </CardContent>
             <CardFooter className="flex flex-col gap-4">
-              <Button className="w-full">Login</Button>
+              <Button className="w-full" asChild>
+                <Link href="/dashboard">Login</Link>
+              </Button>
               <div className="text-center text-sm text-muted-foreground">
                 Don&apos;t have an account?{' '}
                 <Link href="/register" className="underline">
@@ -92,7 +94,9 @@ export default function LoginPage() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button className="w-full">Login</Button>
+              <Button className="w-full" asChild>
+                <Link href="/dashboard">Login</Link>
+              </Button>
             </CardFooter>
           </Card>
         </TabsContent>

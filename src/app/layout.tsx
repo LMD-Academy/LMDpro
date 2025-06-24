@@ -23,7 +23,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className={cn('font-body antialiased min-h-screen', 'animated-gradient-bg-dark')}>
+      <body className={cn('font-body antialiased min-h-screen')}>
         {children}
         <Toaster />
       </body>

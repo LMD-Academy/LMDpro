@@ -59,7 +59,9 @@ export default function RegisterPage() {
               </div>
             </CardContent>
             <CardFooter className="flex flex-col gap-4">
-              <Button className="w-full">Create Account</Button>
+              <Button className="w-full" asChild>
+                <Link href="/dashboard">Create Account</Link>
+              </Button>
               <div className="text-center text-sm text-muted-foreground">
                 Already have an account?{' '}
                 <Link href="/login" className="underline">
