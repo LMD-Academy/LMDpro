@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Bot, Contact, MessageSquareQuestion } from 'lucide-react';
+import { Bot, Contact, MessageSquareQuote } from 'lucide-react';
 import { AiAssistant } from './AiAssistant';
 import { Notepad } from './Notepad';
 
@@ -23,7 +23,7 @@ export function DashboardRightSidebar() {
       <div className="p-4 space-y-2">
          <h3 className="font-semibold text-sm">Help & Support</h3>
          <Button variant="outline" size="sm" className='w-full justify-start'>
-            <MessageSquareQuestion className='mr-2' /> FAQ & Docs
+            <MessageSquareQuote className='mr-2' /> FAQ & Docs
          </Button>
          <Button variant="outline" size="sm" className='w-full justify-start'>
             <Contact className='mr-2' /> Contact Us
