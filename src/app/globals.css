@@ -10,19 +10,19 @@
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 282 100% 42%;
+    --primary: 262 85% 56%;
     --primary-foreground: 210 40% 98%;
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 210 40% 9.8%;
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 240 100% 50%;
+    --accent: 175 65% 50%;
     --accent-foreground: 210 40% 9.8%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 282 100% 42%;
+    --ring: 262 85% 56%;
     --radius: 0.5rem;
   }
 
@@ -33,19 +33,19 @@
     --card-foreground: 210 40% 98%;
     --popover: 270 7% 15%;
     --popover-foreground: 210 40% 98%;
-    --primary: 282 100% 55%;
+    --primary: 262 85% 66%;
     --primary-foreground: 210 40% 98%;
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
-    --accent: 240 100% 60%;
+    --accent: 175 65% 55%;
     --accent-foreground: 210 40% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 282 100% 55%;
+    --ring: 262 85% 66%;
   }
 }
 
@@ -58,6 +58,17 @@
     min-height: 100vh;
   }
 }
+
+@layer utilities {
+  .gradient-ring-focus:focus-visible {
+    @apply outline-none ring-2 ring-offset-2 ring-transparent;
+    border-color: transparent;
+    background-image: linear-gradient(hsl(var(--background)), hsl(var(--background))), linear-gradient(to right, hsl(var(--primary)), hsl(var(--accent)));
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+  }
+}
+
 
 @keyframes animated-gradient {
   0% {
