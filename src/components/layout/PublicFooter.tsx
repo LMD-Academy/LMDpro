@@ -13,7 +13,7 @@ export function PublicFooter() {
       <div className="container flex flex-col items-center justify-between gap-6 py-10">
         <div className="text-center">
             <div className="inline-block rounded-full border bg-card/50 px-4 py-1.5 text-sm shadow-md backdrop-blur-sm">
-                <span>from Jordan 🇯🇴 with Love ❤️</span>
+                <span>from JORDAN with ❤️</span>
             </div>
         </div>
         <div className="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">

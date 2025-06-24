@@ -34,6 +34,18 @@ const courses = [
     title: 'Agile Methodologies',
     description: 'Master frameworks like Scrum and Kanban for adaptive project management.',
   },
+   {
+    title: 'Foundations of Effective Leadership',
+    description: 'Explore leadership styles, motivation, and team communication.',
+  },
+  {
+    title: 'Data Science Specialization',
+    description: 'Learn core Python libraries, data analysis, and machine learning.',
+  },
+  {
+    title: 'Cybersecurity Specialization',
+    description: 'Build a foundation in threat analysis, network security, and cryptography.',
+  },
 ];
 
 
@@ -51,7 +63,7 @@ export function PublicHeader() {
                 Explore Courses <ChevronDown className="ml-2 h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-80">
+            <DropdownMenuContent className="w-96">
               {courses.map((course) => (
                  <DropdownMenuItem key={course.title} asChild>
                     <Link href="#" className="flex flex-col items-start whitespace-normal">
