@@ -57,7 +57,6 @@ export default function ResumePage() {
                                 <Button className="w-full">
                                     <Download className="mr-2"/> Export as PDF
                                 </Button>
-                                <p className="text-xs text-muted-foreground mt-2 text-center">Includes a "Made with LMDpro" watermark.</p>
                             </div>
                         </CardContent>
                     </Card>
