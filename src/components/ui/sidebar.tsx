@@ -191,7 +191,7 @@ const Sidebar = React.forwardRef<HTMLDivElement, React.ComponentProps<'div'>>(
       <div
         ref={ref}
         className={cn(
-          'fixed top-0 left-0 h-full z-30 bg-card border-r transition-all duration-300 ease-in-out',
+          'fixed top-0 left-0 h-full z-40 bg-card border-r transition-all duration-300 ease-in-out',
           state === 'expanded'
             ? 'w-[--sidebar-width]'
             : 'w-[--sidebar-width-icon]',
@@ -206,7 +206,7 @@ const Sidebar = React.forwardRef<HTMLDivElement, React.ComponentProps<'div'>>(
         <Button
           variant="ghost"
           size="icon"
-          className="absolute bottom-16 -right-4 h-8 w-8 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 hidden md:flex"
+          className="absolute bottom-6 -right-4 h-8 w-8 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 hidden md:flex"
           onClick={() => setOpen(state === 'collapsed')}
         >
           {state === 'expanded' ? <PanelLeftClose /> : <PanelLeftOpen />}
@@ -325,6 +325,7 @@ const sidebarMenuButtonVariants = cva(
         default: 'hover:bg-accent hover:text-accent-foreground',
         outline:
           'bg-background shadow-[0_0_0_1px_hsl(var(--border))] hover:bg-accent hover:text-accent-foreground hover:shadow-[0_0_0_1px_hsl(var(--accent))]',
+        ghost: 'hover:bg-accent hover:text-accent-foreground',
       },
       size: {
         default: 'h-9 text-sm',
