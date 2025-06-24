@@ -1,30 +1,23 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardTitle } from '@/components/ui/card';
 import { ArrowRight } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
 
 const courses = [
   {
     title: 'Strategic Communication',
     description: 'Master the art of effective communication for leadership roles.',
-    image: 'https://placehold.co/600x400.png',
-    hint: 'business communication',
     badge: 'Popular'
   },
   {
     title: 'Executive Leadership',
     description: 'Develop the core skills required to lead teams and organizations.',
-    image: 'https://placehold.co/600x400.png',
-    hint: 'leadership conference',
     badge: 'New'
   },
   {
     title: 'AI for Business',
     description: 'Understand how to leverage AI to drive business growth and innovation.',
-    image: 'https://placehold.co/600x400.png',
-    hint: 'artificial intelligence',
     badge: ''
   },
 ];
@@ -44,20 +37,10 @@ export function CourseHighlightsSection() {
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
         {courses.map((course) => (
           <Card key={course.title} className="overflow-hidden transition-transform hover:scale-105">
-            <CardHeader className="p-0">
-              <div className="relative">
-                <Image
-                  src={course.image}
-                  alt={course.title}
-                  width={600}
-                  height={400}
-                  className="h-full w-full object-cover"
-                  data-ai-hint={course.hint}
-                />
-                {course.badge && <Badge className="absolute right-3 top-3">{course.badge}</Badge>}
-              </div>
-            </CardHeader>
             <CardContent className="p-6">
+              <div className="flex justify-end mb-4">
+                {course.badge && <Badge>{course.badge}</Badge>}
+              </div>
               <CardTitle>{course.title}</CardTitle>
               <CardDescription className="mt-2">{course.description}</CardDescription>
             </CardContent>

@@ -25,7 +25,7 @@ export type CreateEducationalContentInput = z.infer<typeof CreateEducationalCont
 
 const CreateEducationalContentOutputSchema = z.object({
   script: z.string().describe('The generated script for the educational content.'),
-  videoDataUri: z.string().describe('Data URI of the generated 3D animated video.'),
+  audioDataUri: z.string().describe('Data URI of the generated audio narration.'),
 });
 
 export type CreateEducationalContentOutput = z.infer<typeof CreateEducationalContentOutputSchema>;
@@ -48,33 +48,6 @@ const scriptWritingPrompt = ai.definePrompt({
   input: {schema: z.object({researchSummary: z.string(), scriptLength: z.string().optional()})},
   output: {schema: z.string()},
   prompt: `Based on the following research summary:\n\n{{researchSummary}}\n\nWrite a script for an educational video.  The video script should be engaging and informative.  The desired script length is {{scriptLength}}.`,
-});
-
-const ttsPrompt = ai.definePrompt({
-  name: 'ttsPrompt',
-  input: {schema: z.string()},
-  output: {schema: z.any()},
-  prompt: `{{script}}`,
-  config: {
-    safetySettings: [
-      {
-        category: 'HARM_CATEGORY_HATE_SPEECH',
-        threshold: 'BLOCK_ONLY_HIGH',
-      },
-      {
-        category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
-        threshold: 'BLOCK_NONE',
-      },
-      {
-        category: 'HARM_CATEGORY_HARASSMENT',
-        threshold: 'BLOCK_MEDIUM_AND_ABOVE',
-      },
-      {
-        category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
-        threshold: 'BLOCK_LOW_AND_ABOVE',
-      },
-    ],
-  },
 });
 
 const createEducationalContentFlow = ai.defineFlow(
@@ -110,20 +83,11 @@ const createEducationalContentFlow = ai.defineFlow(
       tts.media.url.substring(tts.media.url.indexOf(',') + 1),
       'base64'
     );
-    const media = {
-      media: 'data:audio/wav;base64,' + (await toWav(audioBuffer)),
-    };
-
-    // Image generation - Gemini 2.0 Flash only.
-    const image = await ai.generate({
-      model: 'googleai/gemini-2.0-flash-preview-image-generation',
-      prompt: script.output!,
-      config: {responseModalities: ['TEXT', 'IMAGE']},
-    });
+    const audioDataUri = 'data:audio/wav;base64,' + (await toWav(audioBuffer));
 
     return {
       script: script.output!,
-      videoDataUri: image.media!.url,
+      audioDataUri,
     };
   }
 );

@@ -1,26 +1,20 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const testimonials = [
   {
     name: 'Sarah L.',
     role: 'Product Manager',
-    avatar: 'https://placehold.co/100x100.png',
-    hint: 'woman portrait',
     quote: 'LMDpro\'s AI-driven learning path was a game-changer for my career transition. I felt prepared and confident for my new role in weeks!',
   },
   {
     name: 'David C.',
     role: 'Software Engineer',
-    avatar: 'https://placehold.co/100x100.png',
-    hint: 'man portrait',
     quote: 'The automated resume builder is pure magic. It perfectly translated my completed courses into skills that got past every ATS.',
   },
   {
     name: 'Maria G.',
     role: 'Marketing Director',
-    avatar: 'https://placehold.co/100x100.png',
-    hint: 'person portrait',
     quote: 'The quality of the AI-generated video content is astounding. It made complex topics easy to understand and engaging.',
   },
 ];
@@ -44,7 +38,6 @@ export function TestimonialsSection() {
             </CardContent>
             <CardHeader className="flex-row items-center gap-4 p-6 pt-0">
               <Avatar>
-                <AvatarImage src={testimonial.avatar} alt={testimonial.name} data-ai-hint={testimonial.hint} />
                 <AvatarFallback>{testimonial.name.charAt(0)}</AvatarFallback>
               </Avatar>
               <div>
