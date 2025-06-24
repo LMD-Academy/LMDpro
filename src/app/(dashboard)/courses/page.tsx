@@ -13,6 +13,7 @@ const courses = [
   {
     title: 'Intro to Business & Management',
     category: 'General Core Studies L1',
+    slug: 'intro-to-business-management',
     duration: '3-4 hours',
     level: 'Beginner',
     progress: 75,
@@ -20,6 +21,7 @@ const courses = [
   {
     title: 'Fundamentals of Professional Communication',
     category: 'General Core Studies L1',
+    slug: 'fundamentals-of-professional-communication',
     duration: '3-4 hours',
     level: 'Beginner',
     progress: 100,
@@ -27,6 +29,7 @@ const courses = [
     {
     title: 'Agile Methodologies & Frameworks',
     category: 'Professional Specializations L3',
+    slug: 'agile-methodologies-frameworks',
     duration: '7-9 hours',
     level: 'Professional',
     progress: 0,
@@ -34,6 +37,7 @@ const courses = [
   {
     title: 'Product Ownership & Backlog Management',
     category: 'Professional Specializations L3',
+    slug: 'product-ownership-backlog-management',
     duration: '6-8 hours',
     level: 'Professional',
     progress: 25,
@@ -41,6 +45,7 @@ const courses = [
   {
     title: 'Foundations of Autonomous AI Agents',
     category: 'AI Specialization',
+    slug: 'foundations-of-autonomous-ai-agents',
     duration: '5-7 hours',
     level: 'Advanced',
     progress: 50,
@@ -48,6 +53,7 @@ const courses = [
   {
     title: 'Designing Agentic Architectures',
     category: 'AI Specialization',
+    slug: 'designing-agentic-architectures',
     duration: '5-7 hours',
     level: 'Advanced',
     progress: 0,
@@ -127,7 +133,7 @@ export default function CourseCatalogPage() {
                             </CardContent>
                             <CardFooter>
                                 <Button className="w-full" asChild>
-                                    <Link href="#">
+                                    <Link href={`/module/${course.slug}`}>
                                         {course.progress > 0 ? 'Continue Learning' : 'Start Course'} 
                                         <ArrowRight className="ml-2" />
                                     </Link>

@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -7,6 +8,7 @@ import { Bot, FileText, LifeBuoy } from 'lucide-react';
 import { AiAssistant } from './AiAssistant';
 import { Notepad } from './Notepad';
 import Link from 'next/link';
+import { NotepadIcon } from '../icons/NotepadIcon';
 
 const toolbarItems = [
   {
@@ -16,7 +18,7 @@ const toolbarItems = [
     popoverWidth: 'w-[320px] h-[500px]',
   },
   {
-    icon: FileText,
+    icon: NotepadIcon,
     label: 'Notepad',
     content: <Notepad />,
     popoverWidth: 'w-[320px] h-[500px]',

@@ -46,12 +46,6 @@ In the "Library" section, when you load a sub-course:
 *   **Research Companion:**
     *   **Find Publications:** Uses Google Search grounding via the Gemini API to find relevant scholarly articles based on your keywords.
     *   **Identify Trends:** The AI analyzes the found publications to identify emerging themes and trends.
-
-## 5. Resume Builder AI Assistance (Conceptual)
-
-The Resume Builder will feature AI suggestions for:
-*   Improving phrasing and using stronger action verbs.
-*   Tailoring resume content to specific job descriptions (requires user input of job description).
-*   Generating an ATS (Applicant Tracking System) compatibility score with optimization tips.
+*   **AI Demos:** Run live demonstrations of Gemini API capabilities.
 
 LMDpro is committed to leveraging AI to provide a rich, adaptive, and personalized learning journey. We are continuously exploring new ways to integrate AI responsibly to enhance educational outcomes.

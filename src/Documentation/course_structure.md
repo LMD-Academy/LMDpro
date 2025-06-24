@@ -20,7 +20,7 @@ Courses are organized as follows:
 - **Structured Sections:** Break down content into logical sections with clear headings (H1-H6 in Markdown).
 - **Concise Overviews:** Each Field, Standalone Course, and Sub-Course (Module) should have a brief overview (1-3 sentences) summarizing its content and purpose. Lesson overviews can be integrated into the module content.
 - **Appropriate Difficulty and Length:** Clearly indicate estimated difficulty (Beginner, Intermediate, Advanced, Professional, Senior, Executive) and length (in hours or pages, or by number of activities for lessons).
-- **Skills Awarded:** Identify specific skills learners will gain upon completion of modules or courses, to be integrated with the Resume Builder.
+- **Skills Awarded:** Identify specific skills learners will gain upon completion of modules or courses.
 - **Assessments:** Modules should have quizzes for formative assessment, and Standalone Courses should have summative exams/assessments.
 
 ## 3. AI Generation Guidelines
@@ -534,7 +534,7 @@ Difficulty: Senior
 Length: "20-28 hours (Approx. 36-50+ pages total)"
 assessmentPath: EducationalMaterial/Assessments/Level_4_HR_Exam.md
 Sub-Courses:
-* Module: Strategic HR Management & Workforce Planning
+* Module: Strategic HR Management & Analytics
     * filePath: EducationalMaterial/Modules/module_4_1_HR_content.md
     * overview: "Focuses on SHRM principles, advanced strategic workforce planning models, leveraging HR analytics for strategic decisions, managing talent systems, robust succession planning, building high-performance cultures, and HR's role in M&A."
     * difficulty: Senior
@@ -924,4 +924,5 @@ Sub-Courses:
     *   difficulty: Intermediate
     *   length: "4 hours (15-20 pages)"
     *   language: "English"
+
 
