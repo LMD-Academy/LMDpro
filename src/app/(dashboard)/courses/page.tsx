@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -10,52 +11,61 @@ import Link from "next/link";
 
 const courses = [
   {
-    title: 'Strategic Communication for Leaders',
-    category: 'Communication',
-    duration: '4 hours',
-    level: 'Intermediate',
+    title: 'Intro to Business & Management',
+    category: 'General Core Studies L1',
+    duration: '3-4 hours',
+    level: 'Beginner',
     progress: 75,
   },
   {
-    title: 'Advanced Executive Leadership',
-    category: 'Leadership',
-    duration: '8 hours',
-    level: 'Advanced',
+    title: 'Fundamentals of Professional Communication',
+    category: 'General Core Studies L1',
+    duration: '3-4 hours',
+    level: 'Beginner',
     progress: 100,
   },
-  {
-    title: 'AI Fundamentals for Business Professionals',
-    category: 'Technology',
-    duration: '6 hours',
-    level: 'Beginner',
+    {
+    title: 'Agile Methodologies & Frameworks',
+    category: 'Professional Specializations L3',
+    duration: '7-9 hours',
+    level: 'Professional',
     progress: 0,
   },
-    {
-    title: 'Data Science with Python',
-    category: 'Technology',
-    duration: '12 hours',
-    level: 'Intermediate',
+  {
+    title: 'Product Ownership & Backlog Management',
+    category: 'Professional Specializations L3',
+    duration: '6-8 hours',
+    level: 'Professional',
     progress: 25,
   },
   {
-    title: 'Agile Project Management',
-    category: 'Project Management',
-    duration: '5 hours',
-    level: 'Beginner',
-    progress: 0,
-  },
-  {
-    title: 'Financial Modeling & Valuation',
-    category: 'Finance',
-    duration: '10 hours',
+    title: 'Foundations of Autonomous AI Agents',
+    category: 'AI Specialization',
+    duration: '5-7 hours',
     level: 'Advanced',
     progress: 50,
   },
+  {
+    title: 'Designing Agentic Architectures',
+    category: 'AI Specialization',
+    duration: '5-7 hours',
+    level: 'Advanced',
+    progress: 0,
+  },
 ];
+
+const fields = [
+    { id: 'field-core-1', label: 'Core Studies L1' },
+    { id: 'field-prof-3', label: 'Professional Specializations L3' },
+    { id: 'field-ai', label: 'AI Specialization' },
+    { id: 'field-tech', label: 'Technology Development' },
+    { id: 'field-lead', label: 'Leadership Fundamentals' },
+    { id: 'field-agile', label: 'Agile & Project Management' },
+]
 
 export default function CourseCatalogPage() {
     return (
-        <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-8 p-4 sm:p-6 lg:p-8">
+        <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-8">
             <aside className="space-y-6">
                 <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -66,20 +76,14 @@ export default function CourseCatalogPage() {
                     <Separator />
                 </div>
                 <div className="space-y-4">
-                    <h4 className="font-semibold">Category</h4>
+                    <h4 className="font-semibold">Field</h4>
                     <div className="space-y-2">
-                        <div className="flex items-center space-x-2">
-                            <Checkbox id="cat-tech" />
-                            <Label htmlFor="cat-tech">Technology</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <Checkbox id="cat-leadership" />
-                            <Label htmlFor="cat-leadership">Leadership</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <Checkbox id="cat-comm" />
-                            <Label htmlFor="cat-comm">Communication</Label>
-                        </div>
+                        {fields.map(field => (
+                             <div key={field.id} className="flex items-center space-x-2">
+                                <Checkbox id={field.id} />
+                                <Label htmlFor={field.id}>{field.label}</Label>
+                            </div>
+                        ))}
                     </div>
                 </div>
                 <div className="space-y-4">
@@ -96,6 +100,10 @@ export default function CourseCatalogPage() {
                         <div className="flex items-center space-x-2">
                             <Checkbox id="lvl-advanced" />
                             <Label htmlFor="lvl-advanced">Advanced</Label>
+                        </div>
+                         <div className="flex items-center space-x-2">
+                            <Checkbox id="lvl-professional" />
+                            <Label htmlFor="lvl-professional">Professional</Label>
                         </div>
                     </div>
                 </div>
