@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 import { Check } from 'lucide-react';
 import Link from 'next/link';
 
@@ -36,7 +37,7 @@ const tiers = [
   },
 ];
 
-export function PricingSection() {
+export function PricingSection({ usePaperCutStyle = false }: { usePaperCutStyle?: boolean }) {
   return (
     <section id="pricing" className="space-y-12">
       <div className="text-center">
@@ -50,7 +51,15 @@ export function PricingSection() {
       </div>
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
         {tiers.map((tier) => (
-          <div key={tier.name} className={`flex flex-col paper-cut-box ${tier.popular ? 'border-primary ring-2 ring-primary !shadow-accent' : ''}`}>
+          <div key={tier.name} className={cn(
+            'flex flex-col',
+            {
+              'paper-cut-box': usePaperCutStyle,
+              'border-primary ring-2 ring-primary !shadow-accent': usePaperCutStyle && tier.popular,
+              'rounded-lg border bg-card p-6 shadow-sm': !usePaperCutStyle,
+              'border-primary ring-2 ring-primary': !usePaperCutStyle && tier.popular,
+            }
+          )}>
               <CardHeader className='p-0 pb-6'>
                 <CardTitle>{tier.name}</CardTitle>
                 <CardDescription>{tier.description}</CardDescription>

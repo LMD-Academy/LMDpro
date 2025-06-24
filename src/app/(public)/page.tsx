@@ -11,7 +11,7 @@ export default function HomePage() {
         <div className="container space-y-24 py-24 sm:space-y-32">
           <FeaturesSection />
           <CourseHighlightsSection />
-          <PricingSection />
+          <PricingSection usePaperCutStyle={true} />
         </div>
       </div>
     </>
