@@ -69,7 +69,7 @@ export function PublicHeader() {
         </div>
 
         {/* Desktop Navigation */}
-        <nav className="hidden items-center gap-2 sm:gap-4 md:flex">
+        <nav className="hidden items-center gap-2 sm:gap-4 lg:flex">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost">
@@ -116,7 +116,7 @@ export function PublicHeader() {
         </nav>
 
         {/* Desktop Auth Controls */}
-        <div className="ml-auto hidden items-center gap-2 md:flex">
+        <div className="ml-auto hidden items-center gap-2 lg:flex">
           <ThemeToggle />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -143,7 +143,7 @@ export function PublicHeader() {
         </div>
 
         {/* Mobile Navigation */}
-        <div className="flex items-center gap-2 md:hidden">
+        <div className="flex items-center gap-2 lg:hidden">
           <ThemeToggle />
           <Sheet>
             <SheetTrigger asChild>
