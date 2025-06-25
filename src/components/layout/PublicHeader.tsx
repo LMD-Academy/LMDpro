@@ -62,21 +62,20 @@ const courses = [
 
 export function PublicHeader() {
   return (
-    <header className="w-full">
-      <div className="container mt-4 flex h-16 items-center rounded-full border border-border/40 bg-background/95 px-4 shadow-lg backdrop-blur supports-[backdrop-filter]:bg-background/60 md:px-6">
-        <div className="mr-auto flex items-center">
-          <Logo />
-        </div>
+    <header className="container fixed top-0 left-1/2 -translate-x-1/2 z-50 w-full">
+      <div className="flex h-20 items-center justify-between">
+        {/* Left Side: Logo */}
+        <Logo />
 
-        {/* Desktop Navigation */}
-        <nav className="hidden items-center gap-2 sm:gap-4 lg:flex">
+        {/* Centered Desktop Nav */}
+        <nav className="hidden lg:flex items-center gap-2 rounded-full border bg-background/95 p-2 shadow-lg backdrop-blur supports-[backdrop-filter]:bg-background/60">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost">
                 Explore Courses <ChevronDown className="ml-2 h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-96">
+            <DropdownMenuContent className="w-[400px]">
               {courses.map((course) => (
                 <DropdownMenuItem key={course.title} asChild>
                   <Link
@@ -110,17 +109,14 @@ export function PublicHeader() {
           <Button variant="ghost" asChild>
             <Link href="/docs">Documentations</Link>
           </Button>
-          <Button variant="ghost" asChild>
+           <Button variant="ghost" asChild>
             <Link href="/dev">For Developers</Link>
           </Button>
-        </nav>
-
-        {/* Desktop Auth Controls */}
-        <div className="ml-auto hidden items-center gap-2 lg:flex">
+          <Separator orientation="vertical" className="h-6" />
           <ThemeToggle />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="rounded-full">
+              <Button variant="ghost" size="icon">
                 <User className="h-5 w-5" />
                 <span className="sr-only">Open user menu</span>
               </Button>
@@ -134,6 +130,10 @@ export function PublicHeader() {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+        </nav>
+
+        {/* Right Side: Get Started Button (Desktop) */}
+        <div className="hidden lg:flex">
           <Link
             href="/register"
             className={cn(buttonVariants({ size: 'default' }))}
@@ -142,7 +142,7 @@ export function PublicHeader() {
           </Link>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile Menu */}
         <div className="flex items-center gap-2 lg:hidden">
           <ThemeToggle />
           <Sheet>
