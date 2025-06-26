@@ -46,7 +46,14 @@ const researchTopicPrompt = ai.definePrompt({
   model: 'googleai/gemini-2.0-flash',
   input: {schema: CreateEducationalContentInputSchema},
   output: {schema: ResearchOutputSchema}, // Use structured output
-  prompt: `Research the topic of "{{topic}}". Provide a detailed summary. Focus on information that can be used to make an educational video.`,
+  prompt: `Research the topic of "{{topic}}". Provide a detailed summary. Focus on information that can be used to make an educational video.
+
+Respond with a valid JSON object matching this schema:
+\`\`\`json
+{
+  "summary": "string"
+}
+\`\`\``,
 });
 
 // New schema for structured script output
@@ -59,7 +66,14 @@ const scriptWritingPrompt = ai.definePrompt({
   model: 'googleai/gemini-2.0-flash',
   input: {schema: z.object({researchSummary: z.string(), scriptLength: z.string().optional()})},
   output: {schema: ScriptOutputSchema}, // Use structured output
-  prompt: `Based on the following research summary:\n\n{{researchSummary}}\n\nWrite a script for an educational video. The video script should be engaging and informative. The desired script length is {{scriptLength}}.`,
+  prompt: `Based on the following research summary:\n\n{{researchSummary}}\n\nWrite a script for an educational video. The video script should be engaging and informative. The desired script length is {{scriptLength}}.
+
+Respond with a valid JSON object matching this schema:
+\`\`\`json
+{
+  "script": "string"
+}
+\`\`\``,
 });
 
 const createEducationalContentFlow = ai.defineFlow(
@@ -98,7 +112,7 @@ const createEducationalContentFlow = ai.defineFlow(
         responseModalities: ['AUDIO'],
         speechConfig: {
           voiceConfig: {
-            prebuiltVoiceConfig: {voiceName: 'Algenib'},
+            prebuiltVoiceConfig: { voiceName: 'Algenib' },
           },
         },
       },
