@@ -4,21 +4,18 @@ import Link from 'next/link';
 export function PublicFooter() {
   const links = [
     { name: 'About', href: '#' },
+    { name: 'Pricing', href: '/pricing' },
+    { name: 'Developers', href: '/dev' },
     { name: 'Contact', href: '#' },
-    { name: 'Terms of Service', href: '#' },
-    { name: 'Privacy Policy', href: '#' },
+    { name: 'Terms', href: '#' },
+    { name: 'Privacy', href: '#' },
   ];
   return (
     <footer className="border-t border-border/40 bg-background">
-      <div className="container flex flex-col items-center justify-between gap-6 py-10">
-        <div className="text-center">
-            <div className="inline-block rounded-full border bg-card/50 px-4 py-1.5 text-sm shadow-md backdrop-blur-sm">
-                <span>from JORDAN with ❤️</span>
-            </div>
-        </div>
-        <div className="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+      <div className="container flex flex-col items-center gap-6 py-8 md:flex-row md:justify-between">
+        <div className="flex flex-col items-center gap-2 md:items-start">
           <Logo />
-          <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
+          <p className="text-sm text-muted-foreground">
             © {new Date().getFullYear()} LMDpro. All rights reserved.
           </p>
         </div>
@@ -33,6 +30,11 @@ export function PublicFooter() {
             </Link>
           ))}
         </nav>
+      </div>
+      <div className="container flex items-center justify-center border-t border-border/20 py-4">
+        <div className="inline-block rounded-full border bg-card/50 px-4 py-1.5 text-sm shadow-md backdrop-blur-sm">
+            <span>from JORDAN with ❤️</span>
+        </div>
       </div>
     </footer>
   );

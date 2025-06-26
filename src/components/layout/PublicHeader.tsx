@@ -62,10 +62,12 @@ const courses = [
 
 export function PublicHeader() {
   return (
-    <header className="container fixed top-0 left-1/2 -translate-x-1/2 z-50 w-full">
+    <header className="container w-full">
       <div className="flex h-20 items-center justify-between">
         {/* Left Side: Logo */}
-        <Logo />
+        <div className="md:flex-1">
+          <Logo />
+        </div>
 
         {/* Centered Desktop Nav */}
         <nav className="hidden md:flex items-center gap-2 rounded-full border bg-background/95 p-2 shadow-lg backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -130,7 +132,7 @@ export function PublicHeader() {
         </nav>
 
         {/* Right Side: Get Started Button (Desktop) */}
-        <div className="hidden md:flex">
+        <div className="hidden md:flex md:flex-1 md:justify-end">
           <Link
             href="/register"
             className={cn(buttonVariants({ size: 'default' }))}
