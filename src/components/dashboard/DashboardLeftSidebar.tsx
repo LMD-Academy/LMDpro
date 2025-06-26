@@ -16,13 +16,10 @@ import {
   LogOut,
   Library,
   BookOpenCheck,
-  PanelLeftClose, 
-  PanelLeftOpen
 } from 'lucide-react';
 import { Logo } from '@/components/shared/Logo';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Button } from '@/components/ui/button';
 
 const menuItems = [
   { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
@@ -32,7 +29,7 @@ const menuItems = [
 ];
 
 export function DashboardLeftSidebar() {
-  const { state, toggleSidebar } = useSidebar();
+  const { state } = useSidebar();
   const pathname = usePathname();
 
   return (
@@ -60,18 +57,6 @@ export function DashboardLeftSidebar() {
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter>
-        <div className="absolute -right-4 bottom-[33%] hidden md:flex">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 rounded-full bg-primary text-primary-foreground hover:bg-primary/90"
-            onClick={toggleSidebar}
-            aria-label={state === 'expanded' ? 'Collapse sidebar' : 'Expand sidebar'}
-          >
-            {state === 'expanded' ? <PanelLeftClose /> : <PanelLeftOpen />}
-          </Button>
-        </div>
-        
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton href="/" asChild tooltip="Logout" variant="ghost">
