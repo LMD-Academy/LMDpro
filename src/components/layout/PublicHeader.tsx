@@ -68,7 +68,7 @@ export function PublicHeader() {
         <Logo />
 
         {/* Centered Desktop Nav */}
-        <nav className="hidden lg:flex items-center gap-2 rounded-full border bg-background/95 p-2 shadow-lg backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <nav className="hidden md:flex items-center gap-2 rounded-full border bg-background/95 p-2 shadow-lg backdrop-blur supports-[backdrop-filter]:bg-background/60">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost">
@@ -109,9 +109,6 @@ export function PublicHeader() {
           <Button variant="ghost" asChild>
             <Link href="/docs">Documentations</Link>
           </Button>
-           <Button variant="ghost" asChild>
-            <Link href="/dev">For Developers</Link>
-          </Button>
           <Separator orientation="vertical" className="h-6" />
           <ThemeToggle />
           <DropdownMenu>
@@ -133,7 +130,7 @@ export function PublicHeader() {
         </nav>
 
         {/* Right Side: Get Started Button (Desktop) */}
-        <div className="hidden lg:flex">
+        <div className="hidden md:flex">
           <Link
             href="/register"
             className={cn(buttonVariants({ size: 'default' }))}
@@ -143,7 +140,7 @@ export function PublicHeader() {
         </div>
 
         {/* Mobile Menu */}
-        <div className="flex items-center gap-2 lg:hidden">
+        <div className="flex items-center gap-2 md:hidden">
           <ThemeToggle />
           <Sheet>
             <SheetTrigger asChild>
