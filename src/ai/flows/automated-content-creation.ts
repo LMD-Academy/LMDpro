@@ -36,20 +36,30 @@ export async function createEducationalContent(
   return createEducationalContentFlow(input);
 }
 
+// New schema for structured research output
+const ResearchOutputSchema = z.object({
+  summary: z.string().describe('A detailed summary of the researched topic.'),
+});
+
 const researchTopicPrompt = ai.definePrompt({
   name: 'researchTopicPrompt',
   model: 'googleai/gemini-2.0-flash',
   input: {schema: CreateEducationalContentInputSchema},
-  output: {schema: z.string()},
-  prompt: `Research the topic of "{{topic}}". Provide a detailed summary. Focus on information that can be used to make educational video.`,
+  output: {schema: ResearchOutputSchema}, // Use structured output
+  prompt: `Research the topic of "{{topic}}". Provide a detailed summary. Focus on information that can be used to make an educational video.`,
+});
+
+// New schema for structured script output
+const ScriptOutputSchema = z.object({
+  script: z.string().describe('The generated script for the educational video.'),
 });
 
 const scriptWritingPrompt = ai.definePrompt({
   name: 'scriptWritingPrompt',
   model: 'googleai/gemini-2.0-flash',
   input: {schema: z.object({researchSummary: z.string(), scriptLength: z.string().optional()})},
-  output: {schema: z.string()},
-  prompt: `Based on the following research summary:\n\n{{researchSummary}}\n\nWrite a script for an educational video.  The video script should be engaging and informative.  The desired script length is {{scriptLength}}.`,
+  output: {schema: ScriptOutputSchema}, // Use structured output
+  prompt: `Based on the following research summary:\n\n{{researchSummary}}\n\nWrite a script for an educational video. The video script should be engaging and informative. The desired script length is {{scriptLength}}.`,
 });
 
 const createEducationalContentFlow = ai.defineFlow(
@@ -59,11 +69,28 @@ const createEducationalContentFlow = ai.defineFlow(
     outputSchema: CreateEducationalContentOutputSchema,
   },
   async input => {
+    // Add a guard for empty topic
+    if (!input.topic) {
+        throw new Error('Topic cannot be empty.');
+    }
+
     const researchResult = await researchTopicPrompt(input);
-    const script = await scriptWritingPrompt({
-      researchSummary: researchResult.output!,
+    const researchSummary = researchResult.output?.summary;
+
+    if (!researchSummary) {
+      throw new Error('Failed to generate research summary.');
+    }
+
+    const scriptResult = await scriptWritingPrompt({
+      researchSummary: researchSummary,
       scriptLength: input.scriptLength ?? 'medium',
     });
+
+    const script = scriptResult.output?.script;
+
+    if (!script) {
+        throw new Error('Failed to generate script.');
+    }
 
     const tts = await ai.generate({
       model: 'googleai/gemini-2.5-flash-preview-tts',
@@ -75,7 +102,7 @@ const createEducationalContentFlow = ai.defineFlow(
           },
         },
       },
-      prompt: script.output!,
+      prompt: script,
     });
 
     if (!tts.media) {
@@ -88,7 +115,7 @@ const createEducationalContentFlow = ai.defineFlow(
     const audioDataUri = 'data:audio/wav;base64,' + (await toWav(audioBuffer));
 
     return {
-      script: script.output!,
+      script,
       audioDataUri,
     };
   }
