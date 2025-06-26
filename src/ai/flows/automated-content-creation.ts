@@ -38,6 +38,7 @@ export async function createEducationalContent(
 
 const researchTopicPrompt = ai.definePrompt({
   name: 'researchTopicPrompt',
+  model: 'googleai/gemini-2.0-flash',
   input: {schema: CreateEducationalContentInputSchema},
   output: {schema: z.string()},
   prompt: `Research the topic of "{{topic}}". Provide a detailed summary. Focus on information that can be used to make educational video.`,
@@ -45,6 +46,7 @@ const researchTopicPrompt = ai.definePrompt({
 
 const scriptWritingPrompt = ai.definePrompt({
   name: 'scriptWritingPrompt',
+  model: 'googleai/gemini-2.0-flash',
   input: {schema: z.object({researchSummary: z.string(), scriptLength: z.string().optional()})},
   output: {schema: z.string()},
   prompt: `Based on the following research summary:\n\n{{researchSummary}}\n\nWrite a script for an educational video.  The video script should be engaging and informative.  The desired script length is {{scriptLength}}.`,
