@@ -4,48 +4,48 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 280 50% 98%;
+    --foreground: 270 7% 10%;
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 270 7% 10%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 262 85% 56%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 210 40% 9.8%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 175 65% 50%;
-    --accent-foreground: 210 40% 9.8%;
+    --popover-foreground: 270 7% 10%;
+    --primary: 282 100% 42%;
+    --primary-foreground: 280 50% 98%;
+    --secondary: 270 7% 96.1%;
+    --secondary-foreground: 270 7% 9.8%;
+    --muted: 270 7% 96.1%;
+    --muted-foreground: 270 7% 46.9%;
+    --accent: 240 100% 50%;
+    --accent-foreground: 280 40% 98%;
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 262 85% 56%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 270 7% 91.4%;
+    --input: 270 7% 91.4%;
+    --ring: 282 100% 42%;
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 270 7% 10%;
-    --foreground: 210 40% 98%;
-    --card: 270 7% 15%;
-    --card-foreground: 210 40% 98%;
-    --popover: 270 7% 15%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 262 85% 66%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 175 65% 55%;
-    --accent-foreground: 210 40% 98%;
+    --background: 270 7% 15%; /* #262229 Desaturated Purple */
+    --foreground: 280 50% 95%;
+    --card: 270 7% 18%;
+    --card-foreground: 280 50% 95%;
+    --popover: 270 7% 18%;
+    --popover-foreground: 280 50% 95%;
+    --primary: 282 100% 60%; /* #9400D3 Saturated Purple (lightened for dark mode) */
+    --primary-foreground: 280 50% 98%;
+    --secondary: 270 7% 22%;
+    --secondary-foreground: 280 50% 98%;
+    --muted: 270 7% 22%;
+    --muted-foreground: 280 20% 65%;
+    --accent: 240 100% 60%; /* #0000FF Blue (lightened for dark mode) */
+    --accent-foreground: 280 40% 98%;
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 262 85% 66%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 270 7% 25%;
+    --input: 270 7% 25%;
+    --ring: 282 100% 60%;
   }
 }
 
@@ -56,6 +56,29 @@
   body {
     @apply bg-background text-foreground;
     min-height: 100vh;
+  }
+  /* Add prose styles for rich text content */
+  .prose {
+    @apply text-foreground;
+  }
+  .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+    @apply font-headline;
+    color: hsl(var(--foreground));
+  }
+  .prose p, .prose li, .prose blockquote {
+     @apply text-muted-foreground;
+  }
+   .prose a {
+    @apply text-primary hover:text-primary/80;
+  }
+   .prose strong {
+    @apply text-foreground;
+  }
+  .prose ul > li::before {
+    @apply bg-primary;
+  }
+  .prose code {
+    @apply text-accent-foreground font-code bg-muted rounded-sm px-1 py-0.5;
   }
 }
 

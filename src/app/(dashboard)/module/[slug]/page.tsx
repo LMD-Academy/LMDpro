@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { Play, Pause, Clock, FileQuestion, BookOpen, LoaderCircle } from "lucide-react";
+import { Play, Pause, Clock, FileQuestion, BookOpen, LoaderCircle, AlertCircle } from "lucide-react";
 import { createEducationalContent } from '@/ai/flows/automated-content-creation';
 
 // Placeholder for module content. In a real app, this would be fetched based on the slug.
@@ -72,23 +72,26 @@ export default function ModulePage() {
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [playbackRate, setPlaybackRate] = useState(1);
+  const [error, setError] = useState<string | null>(null);
 
   const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
     const generateAudio = async () => {
       setIsLoading(true);
+      setError(null);
       try {
-        const { audioDataUri } = await createEducationalContent({ topic: formattedTitle });
+        const { audioDataUri } = await createEducationalContent({ topic: moduleContent.title });
         setAudioSrc(audioDataUri);
-      } catch (error) {
-        console.error("Failed to generate audio:", error);
+      } catch (err) {
+        console.error("Failed to generate audio:", err);
+        setError("Failed to generate audio. Please try again later.");
       } finally {
         setIsLoading(false);
       }
     };
     generateAudio();
-  }, [formattedTitle]);
+  }, [slug]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -132,7 +135,7 @@ export default function ModulePage() {
   }
   
   const formatTime = (time: number) => {
-    if (isNaN(time) || time === Infinity) {
+    if (isNaN(time) || time === Infinity || time < 0) {
         return '0:00';
     }
     const minutes = Math.floor(time / 60);
@@ -169,6 +172,11 @@ export default function ModulePage() {
                 <div className="flex items-center justify-center h-20">
                     <LoaderCircle className="animate-spin h-6 w-6 text-muted-foreground" />
                     <p className="ml-4 text-muted-foreground">Generating audio, please wait...</p>
+                </div>
+            ) : error ? (
+                <div className="flex items-center justify-center h-20 text-destructive">
+                    <AlertCircle className="h-6 w-6 mr-4" />
+                    <p>{error}</p>
                 </div>
             ) : audioSrc ? (
               <>
@@ -213,16 +221,12 @@ export default function ModulePage() {
                     </Select>
                 </div>
               </>
-            ) : (
-                <div className="flex items-center justify-center h-20 text-destructive">
-                    <p>Failed to load audio. Please try again later.</p>
-                </div>
-            )}
+            ) : null}
           </div>
         </CardHeader>
         <CardContent className="flex-1 overflow-hidden">
             <ScrollArea className="h-full">
-                <div className="prose dark:prose-invert max-w-none pr-6 space-y-4">
+                <article className="prose dark:prose-invert max-w-none pr-6 space-y-4">
                     {moduleContent.paragraphs.map((item, index) => {
                         if(item.type === 'h2') return <h2 key={index}>{item.text}</h2>
                         if(item.type === 'h3') return <h3 key={index}>{item.text}</h3>
@@ -230,7 +234,7 @@ export default function ModulePage() {
                         if(item.type === 'ul') return <ul key={index}>{item.items.map((li, i) => <li key={i}>{li}</li>)}</ul>
                         return null;
                     })}
-                </div>
+                </article>
             </ScrollArea>
         </CardContent>
       </Card>
