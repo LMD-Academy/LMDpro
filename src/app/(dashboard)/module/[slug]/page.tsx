@@ -1,93 +1,238 @@
+
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import { useToast } from "@/hooks/use-toast";
-import { ChevronLeft, ChevronRight, FileQuestion, BookOpen } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
+import { Play, Pause, Clock, FileQuestion, BookOpen, LoaderCircle } from "lucide-react";
+import { createEducationalContent } from '@/ai/flows/automated-content-creation';
 
-// This is a placeholder page. In a real app, you'd fetch module content based on the slug.
+// Placeholder for module content. In a real app, this would be fetched based on the slug.
+const moduleContent = {
+    title: "Introduction to Business & Management Principles",
+    paragraphs: [
+        {
+            type: 'h2',
+            text: '1. Introduction: The World of Business',
+        },
+        {
+            type: 'p',
+            text: "Welcome to the foundational module of your journey into the dynamic world of business and management. In today's interconnected global economy, understanding how organizations operate, create value, and navigate challenges is more crucial than ever. This module serves as your gateway, introducing the core concepts that underpin all commercial activity and organizational success.",
+        },
+        {
+            type: 'h2',
+            text: '2. Defining Business: Purpose and Value Creation',
+        },
+        {
+            type: 'p',
+            text: "The fundamental purpose of any business entity revolves around the concept of value creation. Businesses identify unmet needs or desires in the marketplace and develop offerings – products or services – designed to satisfy them. This process involves acquiring resources (like raw materials, labor, capital, and information), transforming these resources through operational processes, and delivering the final output to the customer."
+        },
+        {
+            type: 'h3',
+            text: 'Stakeholders in Business',
+        },
+        {
+            type: 'ul',
+            items: [
+                "Customers: Receive solutions to their problems.",
+                "Employees: Gain employment and opportunities for skill development.",
+                "Suppliers: Secure a market for their goods and services.",
+                "Owners/Shareholders: Receive a return on their investment.",
+                "Society: Benefits from innovation and economic progress."
+            ]
+        },
+        {
+            type: 'h2',
+            text: '3. Management vs. Leadership: Defining the Roles'
+        },
+        {
+            type: 'p',
+            text: "While often used interchangeably, management and leadership represent distinct, though often overlapping, sets of skills. Management is about coping with complexity—ensuring the organization runs efficiently. Leadership, conversely, is about coping with change—setting a direction and inspiring people to achieve a vision."
+        }
+    ]
+};
+
+
 export default function ModulePage() {
   const params = useParams();
-  // The slug can be a string or string array, so we handle that.
   const slug = Array.isArray(params.slug) ? params.slug.join('/') : params.slug || '';
-
-  const { toast } = useToast();
   
   const formattedTitle = slug
     .split('-')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
   
-  const paragraphs = [
-    "Welcome to the start of your new learning module. This introductory paragraph sets the stage for the key concepts you will explore. The content is designed to be engaging and informative.",
-    "As you move through the material, consider how these principles apply to real-world scenarios. Each paragraph is a building block, constructing a comprehensive understanding of the subject matter.",
-    "Interactive elements are designed to enhance your learning. Use the AI tools provided to delve deeper into topics that pique your interest or clarify points of confusion.",
-    "This paragraph focuses on a critical aspect of the module. Notice the structure and the way information is presented to maximize retention and comprehension. This is where you might use the AI illustration feature.",
-    "Finally, we conclude by summarizing the key takeaways. Reflect on what you've learned and how you can apply this knowledge in your professional life. Congratulations on completing this section!"
-  ];
+  const [audioSrc, setAudioSrc] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [duration, setDuration] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [playbackRate, setPlaybackRate] = useState(1);
 
-  const [currentParagraph, setCurrentParagraph] = React.useState(0);
-  const progress = ((currentParagraph + 1) / paragraphs.length) * 100;
+  const audioRef = useRef<HTMLAudioElement>(null);
 
-  const handleNext = () => {
-    if (currentParagraph < paragraphs.length - 1) {
-      setCurrentParagraph(currentParagraph + 1);
+  useEffect(() => {
+    const generateAudio = async () => {
+      setIsLoading(true);
+      try {
+        const { audioDataUri } = await createEducationalContent({ topic: formattedTitle });
+        setAudioSrc(audioDataUri);
+      } catch (error) {
+        console.error("Failed to generate audio:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    generateAudio();
+  }, [formattedTitle]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (audio) {
+      const setAudioData = () => {
+        setDuration(audio.duration);
+        setCurrentTime(audio.currentTime);
+      };
+      const setAudioTime = () => setCurrentTime(audio.currentTime);
+      const handleEnded = () => setIsPlaying(false);
+
+      audio.addEventListener('loadeddata', setAudioData);
+      audio.addEventListener('timeupdate', setAudioTime);
+      audio.addEventListener('ended', handleEnded);
+
+      return () => {
+        audio.removeEventListener('loadeddata', setAudioData);
+        audio.removeEventListener('timeupdate', setAudioTime);
+        audio.removeEventListener('ended', handleEnded);
+      };
+    }
+  }, [audioSrc]);
+
+  const togglePlayPause = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
     }
   };
-
-  const handlePrev = () => {
-    if (currentParagraph > 0) {
-      setCurrentParagraph(currentParagraph - 1);
+  
+  const handlePlaybackRateChange = (rate: string) => {
+      const newRate = parseFloat(rate);
+      setPlaybackRate(newRate);
+      if(audioRef.current) {
+          audioRef.current.playbackRate = newRate;
+      }
+  }
+  
+  const formatTime = (time: number) => {
+    if (isNaN(time) || time === Infinity) {
+        return '0:00';
     }
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   };
 
-  const handleAiAction = (action: string) => {
-    toast({
-      title: "AI Action Triggered",
-      description: `The AI is now generating the ${action}. Please wait.`,
-    })
+  const handleSeek = (value: number[]) => {
+    if (audioRef.current) {
+        audioRef.current.currentTime = value[0];
+        setCurrentTime(value[0]);
+    }
   }
 
   return (
     <div className="flex flex-col h-[calc(100vh-8rem)]">
-      <header className="mb-4">
-        <h1 className="text-3xl font-bold tracking-tight">{formattedTitle}</h1>
-        <p className="text-muted-foreground">An interactive learning module</p>
+      <header className="mb-4 flex justify-between items-center">
+        <div>
+            <h1 className="text-3xl font-bold tracking-tight">{moduleContent.title}</h1>
+            <p className="text-muted-foreground">An interactive learning module</p>
+        </div>
+        <div className="flex gap-2">
+            <Button variant="secondary"><FileQuestion className="mr-2 h-4 w-4"/> Ask AI about Module</Button>
+            <Button variant="secondary"><BookOpen className="mr-2 h-4 w-4"/> Open in Library</Button>
+        </div>
       </header>
 
       <Card className="flex-1 flex flex-col">
         <CardHeader>
-          <Progress value={progress} className="h-2" />
-          <CardDescription className="text-center mt-2">
-            Paragraph {currentParagraph + 1} of {paragraphs.length}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="flex-1 flex items-center justify-center p-6 text-center">
-            <p className="text-lg leading-relaxed max-w-prose">
-                {paragraphs[currentParagraph]}
-            </p>
-        </CardContent>
-        <CardFooter className="flex-col gap-4">
-            <div className="flex justify-center gap-4">
-                <Button variant="outline" size="lg" onClick={() => handleAiAction('illustration')}>Generate Illustration</Button>
-                <Button variant="outline" size="lg" onClick={() => handleAiAction('audio narration')}>Generate Audio</Button>
-            </div>
-            <div className="flex justify-between items-center w-full">
-                <Button variant="ghost" onClick={handlePrev} disabled={currentParagraph === 0}>
-                    <ChevronLeft className="mr-2"/> Prev
-                </Button>
-                <div className="flex gap-2">
-                    <Button variant="secondary"><FileQuestion className="mr-2"/> Ask AI about Module</Button>
-                    <Button variant="secondary"><BookOpen className="mr-2"/> Open in Library</Button>
+          <CardTitle>Module Audio Player</CardTitle>
+          <CardDescription>Listen to an AI-generated narration of the module content.</CardDescription>
+          <div className="p-4 rounded-lg bg-muted/50 mt-4">
+            {isLoading ? (
+                <div className="flex items-center justify-center h-20">
+                    <LoaderCircle className="animate-spin h-6 w-6 text-muted-foreground" />
+                    <p className="ml-4 text-muted-foreground">Generating audio, please wait...</p>
                 </div>
-                <Button variant="ghost" onClick={handleNext} disabled={currentParagraph === paragraphs.length - 1}>
-                    Next <ChevronRight className="ml-2"/>
-                </Button>
-            </div>
-        </CardFooter>
+            ) : audioSrc ? (
+              <>
+                <audio ref={audioRef} src={audioSrc} preload="metadata" />
+                <div className="flex items-center gap-4">
+                  <Button onClick={togglePlayPause} size="icon" className="rounded-full h-12 w-12 shrink-0">
+                    {isPlaying ? <Pause className="h-6 w-6" /> : <Play className="h-6 w-6" />}
+                  </Button>
+                  <div className="flex-1 flex items-center gap-2">
+                     <span className="text-xs font-mono text-muted-foreground">{formatTime(currentTime)}</span>
+                     <Slider
+                        value={[currentTime]}
+                        max={duration || 100}
+                        step={1}
+                        onValueChange={handleSeek}
+                     />
+                     <span className="text-xs font-mono text-muted-foreground">{formatTime(duration)}</span>
+                  </div>
+                   <div className="flex items-center gap-2">
+                        <Clock className="h-4 w-4 text-muted-foreground" />
+                        <Select onValueChange={handlePlaybackRateChange} defaultValue="1.0">
+                             <SelectTrigger className="w-[80px]">
+                                <SelectValue placeholder="Speed" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="0.5">0.5x</SelectItem>
+                                <SelectItem value="1.0">1.0x</SelectItem>
+                                <SelectItem value="1.5">1.5x</SelectItem>
+                                <SelectItem value="2.0">2.0x</SelectItem>
+                            </SelectContent>
+                        </Select>
+                   </div>
+                    <Select defaultValue="algenib">
+                         <SelectTrigger className="w-[150px]">
+                            <SelectValue placeholder="Select Voice" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="algenib">Algenib (Default)</SelectItem>
+                            <SelectItem value="achernar">Achernar</SelectItem>
+                            <SelectItem value="enif">Enif</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+              </>
+            ) : (
+                <div className="flex items-center justify-center h-20 text-destructive">
+                    <p>Failed to load audio. Please try again later.</p>
+                </div>
+            )}
+          </div>
+        </CardHeader>
+        <CardContent className="flex-1 overflow-hidden">
+            <ScrollArea className="h-full">
+                <div className="prose dark:prose-invert max-w-none pr-6 space-y-4">
+                    {moduleContent.paragraphs.map((item, index) => {
+                        if(item.type === 'h2') return <h2 key={index}>{item.text}</h2>
+                        if(item.type === 'h3') return <h3 key={index}>{item.text}</h3>
+                        if(item.type === 'p') return <p key={index}>{item.text}</p>
+                        if(item.type === 'ul') return <ul key={index}>{item.items.map((li, i) => <li key={i}>{li}</li>)}</ul>
+                        return null;
+                    })}
+                </div>
+            </ScrollArea>
+        </CardContent>
       </Card>
     </div>
   );
