@@ -34,17 +34,6 @@ export default function LoginPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <SocialLogins />
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t" />
-                </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-card px-2 text-muted-foreground">
-                    Or continue with
-                  </span>
-                </div>
-              </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input id="email" type="email" placeholder="m@example.com" />
@@ -66,6 +55,17 @@ export default function LoginPage() {
               <Button className="w-full" asChild>
                 <Link href="/dashboard">Login</Link>
               </Button>
+              <div className="relative w-full">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-card px-2 text-muted-foreground">
+                    Or sign in with
+                  </span>
+                </div>
+              </div>
+              <SocialLogins />
               <div className="text-center text-sm text-muted-foreground">
                 Don&apos;t have an account?{' '}
                 <Link href="/register" className="underline">
