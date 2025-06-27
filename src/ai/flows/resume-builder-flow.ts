@@ -8,18 +8,18 @@
  */
 
 import { ai } from '@/ai/genkit';
-import { z } from 'genkit';
+import { z } from 'zod';
 
 export const GenerateResumeTextInputSchema = z.object({
-  jobTitle: z.string().describe('The user\'s current or desired job title.'),
-  yearsOfExperience: z.number().describe('The user\'s years of experience in the role.'),
-  skills: z.array(z.string()).describe('A list of the user\'s key skills.'),
+  jobTitle: z.string().describe("The user's current or desired job title."),
+  yearsOfExperience: z.number().describe("The user's years of experience in the role."),
+  skills: z.array(z.string()).describe("A list of the user's key skills."),
   jobDescription: z.string().optional().describe('A specific job description to tailor the resume for.'),
   previousRoles: z.array(z.object({
     title: z.string(),
     company: z.string(),
     responsibilities: z.string(),
-  })).describe('Details about the user\'s previous roles.'),
+  })).describe("Details about the user's previous roles."),
 });
 export type GenerateResumeTextInput = z.infer<typeof GenerateResumeTextInputSchema>;
 
@@ -75,7 +75,7 @@ const prompt = ai.definePrompt({
     `,
 });
 
-export const generateResumeTextFlow = ai.defineFlow(
+const generateResumeTextFlow = ai.defineFlow(
   {
     name: 'generateResumeTextFlow',
     inputSchema: GenerateResumeTextInputSchema,
@@ -89,3 +89,9 @@ export const generateResumeTextFlow = ai.defineFlow(
     return output;
   }
 );
+
+export async function generateResumeText(
+  input: GenerateResumeTextInput
+): Promise<GenerateResumeTextOutput> {
+  return generateResumeTextFlow(input);
+}
