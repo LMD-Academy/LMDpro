@@ -9,7 +9,7 @@ interface RecommendedPostsProps {
   count?: number;
 }
 
-export function RecommendedPosts({ currentSlug, count = 2 }: RecommendedPostsProps) {
+export function RecommendedPosts({ currentSlug, count = 3 }: RecommendedPostsProps) {
   const recommended = blogPosts
     .filter((post) => post.slug !== currentSlug)
     .slice(0, count);
@@ -21,7 +21,7 @@ export function RecommendedPosts({ currentSlug, count = 2 }: RecommendedPostsPro
   return (
     <div className="mt-16">
       <h2 className="text-2xl font-bold tracking-tight mb-6 text-center">Read Next</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
         {recommended.map((post) => (
           <Link key={post.slug} href={`/blog/${post.slug}`} className="group block">
             <Card className="flex flex-col overflow-hidden h-full transition-shadow hover:shadow-lg dark:hover:shadow-primary/20">
