@@ -10,9 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Slider } from "@/components/ui/slider";
 import { Play, Pause, Clock, FileQuestion, BookOpen, VolumeX, AlertTriangle, Loader2 } from "lucide-react";
 
-// Data mapping slugs to module titles and their corresponding audio files.
-// In a real app, this would be fetched from a CMS or database.
-const modulesData: { [key: string]: { title: string; audioSrc: string; paragraphs: any[] } } = {
+const modulesData: { [key: string]: { title: string; audioSrc?: string; paragraphs: any[] } } = {
   'strategic-communication': {
     title: "Strategic Communication",
     audioSrc: "/uploads/audio/module_2_2_content.mp3", 
@@ -105,7 +103,8 @@ export default function ModulePage() {
   const params = useParams();
   const slug = Array.isArray(params.slug) ? params.slug.join('/') : params.slug || '';
   
-  const [isClient, setIsClient] = useState(false);
+  const moduleData = modulesData[slug] || null;
+  
   const [isPlaying, setIsPlaying] = useState(false);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
@@ -113,11 +112,6 @@ export default function ModulePage() {
   const [audioError, setAudioError] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement>(null);
-  const moduleData = modulesData[slug] || null;
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -126,34 +120,32 @@ export default function ModulePage() {
     const setAudioData = () => {
       setDuration(audio.duration);
       setCurrentTime(audio.currentTime);
-      setAudioError(false); // Reset error on successful data load
+      if(audioError) setAudioError(false);
     };
 
     const setAudioTime = () => setCurrentTime(audio.currentTime);
     const handleEnded = () => setIsPlaying(false);
     
     const handleError = (e: Event) => {
-      console.error(`Audio Player Error for source ${audio.src}: The audio could not be loaded.`);
+      const audioEl = e.target as HTMLAudioElement;
+      console.error(`Audio Player Error for source ${audioEl.currentSrc}: The audio could not be loaded.`);
       setAudioError(true);
     };
 
-    // Add event listeners
     audio.addEventListener('loadeddata', setAudioData);
     audio.addEventListener('timeupdate', setAudioTime);
     audio.addEventListener('ended', handleEnded);
     audio.addEventListener('error', handleError);
     
-    // Set initial playback rate
     audio.playbackRate = playbackRate;
 
-    // Clean up event listeners on component unmount or when key changes
     return () => {
       audio.removeEventListener('loadeddata', setAudioData);
       audio.removeEventListener('timeupdate', setAudioTime);
       audio.removeEventListener('ended', handleEnded);
       audio.removeEventListener('error', handleError);
     };
-  }, [slug, playbackRate]); // This effect now correctly depends on slug
+  }, [slug, playbackRate, audioError]); 
 
   const togglePlayPause = () => {
     const audio = audioRef.current;
@@ -179,7 +171,7 @@ export default function ModulePage() {
   }
   
   const formatTime = (time: number) => {
-    if (isNaN(time) || time < 0) return '0:00';
+    if (isNaN(time) || time <= 0) return '0:00';
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
@@ -193,7 +185,7 @@ export default function ModulePage() {
     }
   }
 
-  if (!isClient) {
+  if (!slug) {
     return (
         <div className="flex items-center justify-center h-full">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -210,6 +202,8 @@ export default function ModulePage() {
         </div>
       );
   }
+  
+  const hasAudio = moduleData.audioSrc && !audioError;
 
   return (
     <div className="flex flex-col h-full">
@@ -227,50 +221,54 @@ export default function ModulePage() {
       <Card className="flex-1 flex flex-col">
         <CardHeader>
           <CardTitle>Module Audio Player</CardTitle>
-          <CardDescription>Listen to the audio narration of the module content.</CardDescription>
           <div className="p-4 rounded-lg bg-muted/50 mt-4">
-            <audio
-              key={slug} // Force re-render when slug changes
-              ref={audioRef}
-              src={moduleData.audioSrc}
-              preload="metadata"
-            />
-            
-            <div className="flex items-center gap-4">
-              <Button onClick={togglePlayPause} size="icon" className="rounded-full h-12 w-12 shrink-0" disabled={audioError || !moduleData.audioSrc}>
-                {audioError ? <VolumeX className="h-6 w-6"/> : (isPlaying ? <Pause className="h-6 w-6" /> : <Play className="h-6 w-6" />)}
-              </Button>
-              <div className="flex-1 flex items-center gap-2">
-                  <span className="text-xs font-mono text-muted-foreground">{formatTime(currentTime)}</span>
-                  <Slider
-                    value={[currentTime]}
-                    max={duration || 100}
-                    step={1}
-                    onValueChange={handleSeek}
-                    disabled={audioError || !moduleData.audioSrc || duration === 0}
-                  />
-                  <span className="text-xs font-mono text-muted-foreground">{formatTime(duration)}</span>
-              </div>
-                <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-muted-foreground" />
-                    <Select onValueChange={handlePlaybackRateChange} defaultValue="1.0" disabled={audioError || !moduleData.audioSrc}>
-                          <SelectTrigger className="w-[80px]">
-                            <SelectValue placeholder="Speed" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="0.5">0.5x</SelectItem>
-                            <SelectItem value="1.0">1.0x</SelectItem>
-                            <SelectItem value="1.5">1.5x</SelectItem>
-                            <SelectItem value="2.0">2.0x</SelectItem>
-                        </SelectContent>
-                    </Select>
+            {moduleData.audioSrc ? (
+              <>
+                <audio
+                  key={slug} 
+                  ref={audioRef}
+                  src={moduleData.audioSrc}
+                  preload="metadata"
+                />
+                <div className="flex items-center gap-4">
+                  <Button onClick={togglePlayPause} size="icon" className="rounded-full h-12 w-12 shrink-0" disabled={!hasAudio}>
+                    {audioError ? <VolumeX className="h-6 w-6"/> : (isPlaying ? <Pause className="h-6 w-6" /> : <Play className="h-6 w-6" />)}
+                  </Button>
+                  <div className="flex-1 flex items-center gap-2">
+                      <span className="text-xs font-mono text-muted-foreground">{formatTime(currentTime)}</span>
+                      <Slider
+                        value={[currentTime]}
+                        max={duration || 100}
+                        step={1}
+                        onValueChange={handleSeek}
+                        disabled={!hasAudio || duration === 0}
+                      />
+                      <span className="text-xs font-mono text-muted-foreground">{formatTime(duration)}</span>
+                  </div>
+                    <div className="flex items-center gap-2">
+                        <Clock className="h-4 w-4 text-muted-foreground" />
+                        <Select onValueChange={handlePlaybackRateChange} defaultValue="1.0" disabled={!hasAudio}>
+                              <SelectTrigger className="w-[80px]">
+                                <SelectValue placeholder="Speed" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="0.5">0.5x</SelectItem>
+                                <SelectItem value="1.0">1.0x</SelectItem>
+                                <SelectItem value="1.5">1.5x</SelectItem>
+                                <SelectItem value="2.0">2.0x</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
                 </div>
-            </div>
-            {audioError && (
-                 <div className="mt-3 text-sm text-destructive flex items-center gap-2">
-                    <AlertTriangle size={16} />
-                    <p>Audio file not found or failed to load. This content may not have an audio track.</p>
-                </div>
+                {audioError && (
+                     <div className="mt-3 text-sm text-destructive flex items-center gap-2">
+                        <AlertTriangle size={16} />
+                        <p>Audio file not found or failed to load.</p>
+                    </div>
+                )}
+              </>
+            ) : (
+              <CardDescription>Audio narration is not available for this module.</CardDescription>
             )}
           </div>
         </CardHeader>
