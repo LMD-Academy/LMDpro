@@ -130,50 +130,72 @@ export default function ModulePage() {
   // Effect for handling audio element events
   useEffect(() => {
     const audio = audioRef.current;
-    if (audio && moduleData?.audioSrc) {
-      const setAudioData = () => {
-        setDuration(audio.duration);
-        setCurrentTime(audio.currentTime);
-        setAudioError(false);
-      };
-      const setAudioTime = () => setCurrentTime(audio.currentTime);
-      const handleEnded = () => setIsPlaying(false);
-      const handleError = (e: Event) => {
-        const audioEl = e.target as HTMLAudioElement;
-        const error = audioEl.error;
-        console.error("Audio Player Error:", {
-            code: error?.code,
-            message: error?.message,
-            source: audioEl.currentSrc
-        });
-        setAudioError(true);
-      };
+    if (!audio) return;
 
-      audio.addEventListener('loadeddata', setAudioData);
-      audio.addEventListener('timeupdate', setAudioTime);
-      audio.addEventListener('ended', handleEnded);
-      audio.addEventListener('error', handleError);
+    const setAudioData = () => {
+      setDuration(audio.duration);
+      setCurrentTime(audio.currentTime);
+    };
+    const setAudioTime = () => setCurrentTime(audio.currentTime);
+    const handleEnded = () => setIsPlaying(false);
+    const handleError = (e: Event) => {
+      const audioEl = e.target as HTMLAudioElement;
+      const error = audioEl.error;
+      let errorDetails = "An unknown error occurred.";
+      if (error) {
+        switch (error.code) {
+          case error.MEDIA_ERR_ABORTED:
+            errorDetails = "The fetching process for the audio was aborted by the user.";
+            break;
+          case error.MEDIA_ERR_NETWORK:
+            errorDetails = "A network error caused the audio download to fail.";
+            break;
+          case error.MEDIA_ERR_DECODE:
+            errorDetails = "The audio playback was aborted due to a corruption problem or because the audio used features your browser did not support.";
+            break;
+          case error.MEDIA_ERR_SRC_NOT_SUPPORTED:
+            errorDetails = "The audio could not be loaded, either because the server or network failed or because the format is not supported.";
+            break;
+          default:
+            errorDetails = `An unknown error occurred. Code: ${error.code}. Message: ${error.message}`;
+            break;
+        }
+      }
+      console.error(`Audio Player Error for source ${audioEl.currentSrc}: ${errorDetails}`);
+      setAudioError(true);
+    };
 
-      // Reset state when audio source changes
+    audio.addEventListener('loadeddata', setAudioData);
+    audio.addEventListener('timeupdate', setAudioTime);
+    audio.addEventListener('ended', handleEnded);
+    audio.addEventListener('error', handleError);
+
+    // If moduleData has been resolved (i.e., not undefined)
+    if (moduleData !== undefined) {
+      // Reset state for new module or if module is not found
       setAudioError(false);
       setIsPlaying(false);
       setCurrentTime(0);
-      
-      // Explicitly set src and load if it has changed
-      const absoluteSrc = new URL(moduleData.audioSrc, window.location.origin).href;
-      if(audio.src !== absoluteSrc) {
-        audio.src = moduleData.audioSrc;
-      }
-      audio.load();
+      setDuration(0);
 
-      return () => {
-        audio.removeEventListener('loadeddata', setAudioData);
-        audio.removeEventListener('timeupdate', setAudioTime);
-        audio.removeEventListener('ended', handleEnded);
-        audio.removeEventListener('error', handleError);
-      };
+      const audioSrc = moduleData?.audioSrc;
+      const absoluteSrc = audioSrc ? new URL(audioSrc, window.location.origin).href : '';
+
+      if (audio.src !== absoluteSrc) {
+        audio.src = absoluteSrc;
+        if (audioSrc) {
+          audio.load();
+        }
+      }
     }
-  }, [moduleData?.audioSrc]);
+
+    return () => {
+      audio.removeEventListener('loadeddata', setAudioData);
+      audio.removeEventListener('timeupdate', setAudioTime);
+      audio.removeEventListener('ended', handleEnded);
+      audio.removeEventListener('error', handleError);
+    };
+  }, [moduleData]);
 
 
   const togglePlayPause = () => {
@@ -252,7 +274,7 @@ export default function ModulePage() {
           <div className="p-4 rounded-lg bg-muted/50 mt-4">
             <audio ref={audioRef} preload="metadata" />
             <div className="flex items-center gap-4">
-              <Button onClick={togglePlayPause} size="icon" className="rounded-full h-12 w-12 shrink-0" disabled={audioError}>
+              <Button onClick={togglePlayPause} size="icon" className="rounded-full h-12 w-12 shrink-0" disabled={audioError || !moduleData.audioSrc}>
                 {audioError ? <VolumeX className="h-6 w-6"/> : (isPlaying ? <Pause className="h-6 w-6" /> : <Play className="h-6 w-6" />)}
               </Button>
               <div className="flex-1 flex items-center gap-2">
@@ -262,13 +284,13 @@ export default function ModulePage() {
                     max={duration || 100}
                     step={1}
                     onValueChange={handleSeek}
-                    disabled={audioError}
+                    disabled={audioError || !moduleData.audioSrc}
                   />
                   <span className="text-xs font-mono text-muted-foreground">{formatTime(duration)}</span>
               </div>
                 <div className="flex items-center gap-2">
                     <Clock className="h-4 w-4 text-muted-foreground" />
-                    <Select onValueChange={handlePlaybackRateChange} defaultValue="1.0" disabled={audioError}>
+                    <Select onValueChange={handlePlaybackRateChange} defaultValue="1.0" disabled={audioError || !moduleData.audioSrc}>
                           <SelectTrigger className="w-[80px]">
                             <SelectValue placeholder="Speed" />
                         </SelectTrigger>
@@ -284,7 +306,7 @@ export default function ModulePage() {
             {audioError && (
                  <div className="mt-3 text-sm text-destructive flex items-center gap-2">
                     <AlertTriangle size={16} />
-                    <p>Audio file not found or failed to load for this module.</p>
+                    <p>Audio file not found or failed to load. Please check the console for details.</p>
                 </div>
             )}
           </div>
