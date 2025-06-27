@@ -13,10 +13,70 @@ import { Play, Pause, Clock, FileQuestion, BookOpen, VolumeX, AlertTriangle, Loa
 // Data mapping slugs to module titles and their corresponding audio files.
 // In a real app, this would be fetched from a CMS or database.
 const modulesData: { [key: string]: { title: string; audioSrc: string; paragraphs: any[] } } = {
+  // From Dashboard
+  'strategic-communication': {
+    title: "Strategic Communication",
+    // Mapping to 'Business Communication & Negotiation' module file
+    audioSrc: "/uploads/audio/module_2_2_content.mp3", 
+    paragraphs: [ { type: 'p', text: 'Content for this module will be available soon.'} ]
+  },
+  'executive-leadership': {
+    title: "Executive Leadership",
+    // Mapping to 'Global Leadership & C-Suite Strategy' module file
+    audioSrc: "/uploads/audio/module_5_1_GM_content.mp3", 
+    paragraphs: [ { type: 'p', text: 'Content for this module will be available soon.'} ]
+  },
+  'ai-for-business': {
+    title: "AI for Business",
+    // Mapping to a foundational AI module file as a plausible substitute
+    audioSrc: "/uploads/audio/ai_module_1_foundations_content.mp3", 
+    paragraphs: [ { type: 'p', text: 'Content for this module will be available soon.'} ]
+  },
+
+  // From Catalog
   'intro-to-business-management': {
     title: "Introduction to Business & Management Principles",
     audioSrc: "/uploads/audio/module_1_1_content.mp3",
-    paragraphs: []
+    paragraphs: [
+        {
+            type: 'h2',
+            text: '1. Introduction: The World of Business',
+        },
+        {
+            type: 'p',
+            text: "Welcome to the foundational module of your journey into the dynamic world of business and management. In today's interconnected global economy, understanding how organizations operate, create value, and navigate challenges is more crucial than ever. This module serves as your gateway, introducing the core concepts that underpin all commercial activity and organizational success.",
+        },
+        {
+            type: 'h2',
+            text: '2. Defining Business: Purpose and Value Creation',
+        },
+        {
+            type: 'p',
+            text: "The fundamental purpose of any business entity revolves around the concept of value creation. Businesses identify unmet needs or desires in the marketplace and develop offerings – products or services – designed to satisfy them. This process involves acquiring resources (like raw materials, labor, capital, and information), transforming these resources through operational processes, and delivering the final output to the customer."
+        },
+        {
+            type: 'h3',
+            text: 'Stakeholders in Business',
+        },
+        {
+            type: 'ul',
+            items: [
+                "Customers: Receive solutions to their problems.",
+                "Employees: Gain employment and opportunities for skill development.",
+                "Suppliers: Secure a market for their goods and services.",
+                "Owners/Shareholders: Receive a return on their investment.",
+                "Society: Benefits from innovation and economic progress."
+            ]
+        },
+        {
+            type: 'h2',
+            text: '3. Management vs. Leadership: Defining the Roles'
+        },
+        {
+            type: 'p',
+            text: "While often used interchangeably, management and leadership represent distinct, though often overlapping, sets of skills. Management is about coping with complexity—ensuring the organization runs efficiently. Leadership, conversely, is about coping with change—setting a direction and inspiring people to achieve a vision."
+        }
+    ]
   },
   'fundamentals-of-professional-communication': {
     title: "Fundamentals of Professional Communication",
@@ -43,64 +103,7 @@ const modulesData: { [key: string]: { title: string; audioSrc: string; paragraph
     audioSrc: "/uploads/audio/ai_module_2_architectures_content.mp3",
     paragraphs: [ { type: 'p', text: 'Content for this module will be available soon.'} ]
   },
-  'strategic-communication': {
-    title: "Strategic Communication",
-    audioSrc: "/uploads/audio/strategic-communication.mp3",
-    paragraphs: [ { type: 'p', text: 'Content for this module will be available soon.'} ]
-  },
-  'executive-leadership': {
-    title: "Executive Leadership",
-    audioSrc: "/uploads/audio/executive-leadership.mp3",
-    paragraphs: [ { type: 'p', text: 'Content for this module will be available soon.'} ]
-  },
-  'ai-for-business': {
-    title: "AI for Business",
-    audioSrc: "/uploads/audio/ai-for-business.mp3",
-    paragraphs: [ { type: 'p', text: 'Content for this module will be available soon.'} ]
-  },
 };
-
-// Hardcoded content for the one module that has it
-modulesData['intro-to-business-management'].paragraphs = [
-    {
-        type: 'h2',
-        text: '1. Introduction: The World of Business',
-    },
-    {
-        type: 'p',
-        text: "Welcome to the foundational module of your journey into the dynamic world of business and management. In today's interconnected global economy, understanding how organizations operate, create value, and navigate challenges is more crucial than ever. This module serves as your gateway, introducing the core concepts that underpin all commercial activity and organizational success.",
-    },
-    {
-        type: 'h2',
-        text: '2. Defining Business: Purpose and Value Creation',
-    },
-    {
-        type: 'p',
-        text: "The fundamental purpose of any business entity revolves around the concept of value creation. Businesses identify unmet needs or desires in the marketplace and develop offerings – products or services – designed to satisfy them. This process involves acquiring resources (like raw materials, labor, capital, and information), transforming these resources through operational processes, and delivering the final output to the customer."
-    },
-    {
-        type: 'h3',
-        text: 'Stakeholders in Business',
-    },
-    {
-        type: 'ul',
-        items: [
-            "Customers: Receive solutions to their problems.",
-            "Employees: Gain employment and opportunities for skill development.",
-            "Suppliers: Secure a market for their goods and services.",
-            "Owners/Shareholders: Receive a return on their investment.",
-            "Society: Benefits from innovation and economic progress."
-        ]
-    },
-    {
-        type: 'h2',
-        text: '3. Management vs. Leadership: Defining the Roles'
-    },
-    {
-        type: 'p',
-        text: "While often used interchangeably, management and leadership represent distinct, though often overlapping, sets of skills. Management is about coping with complexity—ensuring the organization runs efficiently. Leadership, conversely, is about coping with change—setting a direction and inspiring people to achieve a vision."
-    }
-];
 
 
 export default function ModulePage() {
@@ -136,8 +139,14 @@ export default function ModulePage() {
       const setAudioTime = () => setCurrentTime(audio.currentTime);
       const handleEnded = () => setIsPlaying(false);
       const handleError = (e: Event) => {
+        const audioEl = e.target as HTMLAudioElement;
+        const error = audioEl.error;
+        console.error("Audio Player Error:", {
+            code: error?.code,
+            message: error?.message,
+            source: audioEl.currentSrc
+        });
         setAudioError(true);
-        console.error("Audio error:", (e.target as HTMLAudioElement).error);
       };
 
       audio.addEventListener('loadeddata', setAudioData);
@@ -149,6 +158,12 @@ export default function ModulePage() {
       setAudioError(false);
       setIsPlaying(false);
       setCurrentTime(0);
+      
+      // Explicitly set src and load if it has changed
+      const absoluteSrc = new URL(moduleData.audioSrc, window.location.origin).href;
+      if(audio.src !== absoluteSrc) {
+        audio.src = moduleData.audioSrc;
+      }
       audio.load();
 
       return () => {
@@ -235,7 +250,7 @@ export default function ModulePage() {
           <CardTitle>Module Audio Player</CardTitle>
           <CardDescription>Listen to the audio narration of the module content.</CardDescription>
           <div className="p-4 rounded-lg bg-muted/50 mt-4">
-            <audio ref={audioRef} src={moduleData.audioSrc} preload="metadata" />
+            <audio ref={audioRef} preload="metadata" />
             <div className="flex items-center gap-4">
               <Button onClick={togglePlayPause} size="icon" className="rounded-full h-12 w-12 shrink-0" disabled={audioError}>
                 {audioError ? <VolumeX className="h-6 w-6"/> : (isPlaying ? <Pause className="h-6 w-6" /> : <Play className="h-6 w-6" />)}
