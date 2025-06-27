@@ -1,3 +1,4 @@
+
 import { Logo } from '@/components/shared/Logo';
 import Link from 'next/link';
 
@@ -5,6 +6,7 @@ export function PublicFooter() {
   const links = [
     { name: 'About', href: '#' },
     { name: 'Pricing', href: '/pricing' },
+    { name: 'Blog', href: '/blog' },
     { name: 'Developers', href: '/dev' },
     { name: 'Contact', href: '#' },
     { name: 'Terms', href: '#' },

@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button, buttonVariants } from '@/components/ui/button';
@@ -108,6 +109,9 @@ export function PublicHeader() {
           <Button variant="ghost" asChild>
             <Link href="/pricing">Pricing</Link>
           </Button>
+           <Button variant="ghost" asChild>
+            <Link href="/blog">Blog</Link>
+          </Button>
           <Button variant="ghost" asChild>
             <Link href="/docs">Documentations</Link>
           </Button>
@@ -178,6 +182,17 @@ export function PublicHeader() {
                     )}
                   >
                     Pricing
+                  </Link>
+                </SheetClose>
+                 <SheetClose asChild>
+                  <Link
+                    href="/blog"
+                    className={cn(
+                      buttonVariants({ variant: 'ghost' }),
+                      'justify-start'
+                    )}
+                  >
+                    Blog
                   </Link>
                 </SheetClose>
                 <SheetClose asChild>
