@@ -24,28 +24,34 @@
     --input: 270 7% 91.4%;
     --ring: 282 100% 42%;
     --radius: 0.75rem;
+
+    --gradient-start: 220 100% 96%;
+    --gradient-end: 240 67% 94%;
   }
 
   .dark {
-    --background: 270 7% 15%; /* #262229 Desaturated Purple */
+    --background: 270 7% 15%;
     --foreground: 280 50% 95%;
     --card: 270 7% 18%;
     --card-foreground: 280 50% 95%;
     --popover: 270 7% 18%;
     --popover-foreground: 280 50% 95%;
-    --primary: 282 100% 60%; /* #9400D3 Saturated Purple (lightened for dark mode) */
+    --primary: 282 100% 60%;
     --primary-foreground: 280 50% 98%;
     --secondary: 270 7% 22%;
     --secondary-foreground: 280 50% 98%;
     --muted: 270 7% 22%;
-    --muted-foreground: 280 20% 65%;
-    --accent: 240 100% 60%; /* #0000FF Blue (lightened for dark mode) */
+    --muted-foreground: 280 20% 80%;
+    --accent: 240 100% 60%;
     --accent-foreground: 280 40% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
     --border: 270 7% 25%;
     --input: 270 7% 25%;
     --ring: 282 100% 60%;
+
+    --gradient-start: 220 14% 16%;
+    --gradient-end: 240 0% 23%;
   }
 }
 
@@ -70,7 +76,7 @@
     @apply font-headline text-foreground;
   }
   .prose h1 {
-     @apply mt-12 scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl;
+    @apply mt-12 scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl;
   }
   .prose h2 {
     @apply mt-10 scroll-m-20 border-b pb-2 text-3xl font-bold tracking-tight first:mt-0;
@@ -78,11 +84,11 @@
   .prose h3 {
     @apply mt-8 scroll-m-20 text-2xl font-bold tracking-tight;
   }
-   .prose h4 {
+  .prose h4 {
     @apply mt-6 scroll-m-20 text-xl font-bold tracking-tight;
   }
   .prose p {
-    @apply leading-7 text-base text-foreground/80 dark:text-foreground/70 [&:not(:first-child)]:mt-6;
+    @apply leading-7 text-base text-muted-foreground [&:not(:first-child)]:mt-6;
   }
   .prose a {
     @apply text-primary font-medium underline underline-offset-4 hover:text-primary/90;
@@ -91,7 +97,7 @@
     @apply font-semibold text-foreground;
   }
   .prose ul {
-    @apply my-6 ml-6 list-disc [&>li]:mt-2 text-foreground/80 dark:text-foreground/70;
+    @apply my-6 ml-6 list-disc [&>li]:mt-2 text-muted-foreground;
   }
   .prose ul > li::before {
     @apply hidden; /* Use default list-disc marker */
@@ -131,15 +137,21 @@
 }
 
 .public-layout-bg {
-  /* Lighter gradient for light theme */
-  background: linear-gradient(45deg, #f0f8ff, #e6e6fa, #fdf5e6, #fafad2);
+  background: linear-gradient(
+    45deg,
+    hsl(var(--gradient-start)),
+    hsl(var(--gradient-end))
+  );
   background-size: 300% 300%;
   animation: animated-gradient 20s ease infinite;
 }
 
 .dark .public-layout-bg {
-  /* Original dark gradient for dark theme */
-  background: linear-gradient(45deg, #202632, #3b3b3b, #262a36, #3b3b3b);
+  background: linear-gradient(
+    45deg,
+    hsl(var(--gradient-start)),
+    hsl(var(--gradient-end))
+  );
   background-size: 300% 300%;
   animation: animated-gradient 20s ease infinite;
 }
