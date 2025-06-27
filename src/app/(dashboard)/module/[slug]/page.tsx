@@ -8,8 +8,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { Play, Pause, Clock, FileQuestion, BookOpen, LoaderCircle, AlertCircle } from "lucide-react";
+import { Play, Pause, Clock, FileQuestion, BookOpen, AlertCircle } from "lucide-react";
 import { createEducationalContent } from '@/ai/flows/automated-content-creation';
+import Image from 'next/image';
 
 // Placeholder for module content. In a real app, this would be fetched based on the slug.
 const moduleContent = {
@@ -170,7 +171,7 @@ export default function ModulePage() {
           <div className="p-4 rounded-lg bg-muted/50 mt-4">
             {isLoading ? (
                 <div className="flex items-center justify-center h-20">
-                    <LoaderCircle className="animate-spin h-6 w-6 text-muted-foreground" />
+                    <Image src="/BG-Loading.gif" alt="AI generating audio..." width={48} height={48} unoptimized />
                     <p className="ml-4 text-muted-foreground">Generating audio, please wait...</p>
                 </div>
             ) : error ? (
