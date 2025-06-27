@@ -18,7 +18,9 @@ export function Logo({ className, showText = true }: LogoProps) {
     >
       <LogoIcon />
       {showText && (
-        <span className="text-xl font-bold tracking-tighter">LMDpro</span>
+        <span className="text-xl tracking-tighter text-foreground">
+            <span className="font-bold">LMD</span>pro
+        </span>
       )}
     </Link>
   );
