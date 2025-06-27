@@ -10,7 +10,7 @@
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
 
-export const GenerateResumeTextInputSchema = z.object({
+const GenerateResumeTextInputSchema = z.object({
   jobTitle: z.string().describe("The user's current or desired job title."),
   yearsOfExperience: z.number().describe("The user's years of experience in the role."),
   skills: z.array(z.string()).describe("A list of the user's key skills."),
@@ -23,7 +23,7 @@ export const GenerateResumeTextInputSchema = z.object({
 });
 export type GenerateResumeTextInput = z.infer<typeof GenerateResumeTextInputSchema>;
 
-export const GenerateResumeTextOutputSchema = z.object({
+const GenerateResumeTextOutputSchema = z.object({
   professionalSummary: z
     .string()
     .describe('A professionally written, concise professional summary.'),
