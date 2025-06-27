@@ -25,7 +25,7 @@
     *The clean and modern landing page for LMDpro.*
 
 -   **Course Catalog:**
-    ![Course Catalog Screenshot](/public/screenshots/courses.png)
+    ![Course Catalog Screenshot](/public/screenshots/catalog.png)
     *Browse the extensive catalog of courses with advanced filtering.*
 
 -   **Module View:**
