@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import { Calendar, UserCircle } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
+import { RecommendedPosts } from '@/components/blog/RecommendedPosts';
 
 export async function generateStaticParams() {
   return blogPosts.map((post) => ({
@@ -16,7 +17,7 @@ function getPostBySlug(slug: string): BlogPost | undefined {
   return blogPosts.find((p) => p.slug === slug);
 }
 
-export default function BlogPostPage({ params }: { params: { slug: string } }) {
+export default function BlogPostPage({ params }: { params: { slug:string } }) {
   const post = getPostBySlug(params.slug);
 
   if (!post) {
@@ -58,6 +59,8 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
               layout="fill"
               objectFit="cover"
               className="transition-transform duration-500 hover:scale-105"
+              data-ai-hint={post.imageHint}
+              priority
             />
           </div>
 
@@ -65,13 +68,12 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
             {post.content}
           </div>
 
-          <Separator className="my-12" />
-
-          <footer className="text-center">
-            <h3 className="font-semibold text-lg mb-2">About the Author</h3>
-            <p className="text-muted-foreground text-sm">{post.authorBio}</p>
-          </footer>
         </article>
+          
+        <Separator className="my-16" />
+
+        <RecommendedPosts currentSlug={post.slug} />
+
       </div>
     </div>
   );
