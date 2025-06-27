@@ -17,7 +17,8 @@ import {
   LogOut,
   Library,
   BookOpenCheck,
-  Award
+  Award,
+  FileText
 } from 'lucide-react';
 import { Logo } from '@/components/shared/Logo';
 import Link from 'next/link';
@@ -27,6 +28,7 @@ const menuItems = [
   { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { href: '/courses', icon: GraduationCap, label: 'Course Catalog' },
   { href: '/library', icon: Library, label: 'Academic Research' },
+  { href: '/resume', icon: FileText, label: 'Resume Builder' },
   { href: '/certificates', icon: Award, label: 'My Certificates' },
   { href: '/docs', icon: BookOpenCheck, label: 'Documentations' },
 ];
