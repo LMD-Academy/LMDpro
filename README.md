@@ -1,16 +1,16 @@
 
 # LMDpro: AI eLearning Academy
 
-![LMDpro Dashboard Screenshot](/public/screenshots/dashboard.png)
+![LMDpro Dashboard Screenshot](/screenshots/dashboard.png)
 
 **LMDpro** is a modern, open-source, AI-powered learning platform designed to personalize and accelerate professional development. Leveraging cutting-edge AI, LMDpro provides tailored learning paths, automated content creation, an intelligent resume builder, and an interactive learning environment to help users achieve their career goals effectively.
 
 ## Key Features
 
 -   **AI-Powered Learning Paths:** Automatically generates personalized learning paths based on user profiles, identified skill gaps, and real-time performance data.
--   **AI Content Creation:** Utilizes AI agents to research topics, write scripts, and generate audio narration for new educational content on demand.
--   **Intelligent Resume Builder:** (Conceptual) Provides AI assistance to create and optimize resume descriptions with industry keywords. Skills from completed courses are automatically added.
--   **Interactive Course Delivery:** Courses include text, AI-generated audio, interactive modules, and assessments. The platform supports gamification elements like badges and points.
+-   **AI Content Creation:** Utilizes AI agents to research topics and write scripts for new educational content on demand.
+-   **Intelligent Resume Builder:** Provides AI assistance to create and optimize resume descriptions with industry keywords. Skills from completed courses are automatically added.
+-   **Interactive Course Delivery:** Courses include text, pre-recorded audio, interactive modules, and assessments. The platform supports gamification elements like badges and points.
 -   **Comprehensive Course Catalog:** Browse a rich catalog of courses organized by Fields, Majors, and Levels, from foundational studies to executive-level capstone programs.
 -   **AI Academic Research Agent:** An interactive AI agent in the Library to help users research topics, find publications, and identify trends.
 -   **Full-Featured Admin/IAM Dashboard:** Manage learners, assign courses, issue certificates, and monitor team progress from a dedicated admin console.
@@ -21,19 +21,19 @@
 ## Screenshots
 
 -   **Homepage:**
-    ![Homepage Screenshot](/public/screenshots/homepage.png)
+    ![Homepage Screenshot](/screenshots/homepage.png)
     *The clean and modern landing page for LMDpro.*
 
 -   **Course Catalog:**
-    ![Course Catalog Screenshot](/public/screenshots/catalog.png)
+    ![Course Catalog Screenshot](/screenshots/catalog.png)
     *Browse the extensive catalog of courses with advanced filtering.*
 
 -   **Module View:**
-    ![Learning Module Screenshot](/public/screenshots/module.png)
-    *Engage with interactive course content with an integrated AI audio player.*
+    ![Learning Module Screenshot](/screenshots/module.png)
+    *Engage with interactive course content with an integrated audio player.*
 
 -   **AI Assistant & Library:**
-    ![AI Assistant Screenshot](/public/screenshots/library.png)
+    ![AI Assistant Screenshot](/screenshots/library.png)
     *Use the powerful AI research agent to explore topics and get answers.*
 
 ## Technology Stack

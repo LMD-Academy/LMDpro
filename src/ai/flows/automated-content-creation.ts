@@ -1,8 +1,9 @@
+
 'use server';
 
 /**
- * @fileOverview AI flow for automated educational content creation, including researching topics,
- * writing scripts, and generating 3D animated videos.
+ * @fileOverview AI flow for automated educational content creation, including researching topics
+ * and writing scripts.
  *
  * - createEducationalContent - A function that handles the content creation process.
  * - CreateEducationalContentInput - The input type for the createEducationalContent function.
@@ -11,7 +12,6 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
-import wav from 'wav';
 
 const CreateEducationalContentInputSchema = z.object({
   topic: z.string().describe('The topic for which to generate educational content.'),
@@ -25,7 +25,6 @@ export type CreateEducationalContentInput = z.infer<typeof CreateEducationalCont
 
 const CreateEducationalContentOutputSchema = z.object({
   script: z.string().describe('The generated script for the educational content.'),
-  audioDataUri: z.string().describe('Data URI of the generated audio narration.'),
 });
 
 export type CreateEducationalContentOutput = z.infer<typeof CreateEducationalContentOutputSchema>;
@@ -106,61 +105,12 @@ const createEducationalContentFlow = ai.defineFlow(
         throw new Error('Failed to generate script.');
     }
 
-    const tts = await ai.generate({
-      model: 'googleai/gemini-2.5-flash-preview-tts',
-      config: {
-        responseModalities: ['AUDIO'],
-        speechConfig: {
-          voiceConfig: {
-            prebuiltVoiceConfig: { voiceName: 'Algenib' },
-          },
-        },
-      },
-      prompt: script,
-    });
-
-    if (!tts.media) {
-      throw new Error('no media returned');
-    }
-    const audioBuffer = Buffer.from(
-      tts.media.url.substring(tts.media.url.indexOf(',') + 1),
-      'base64'
-    );
-    const audioDataUri = 'data:audio/wav;base64,' + (await toWav(audioBuffer));
-
     return {
       script,
-      audioDataUri,
     };
   }
 );
 
-async function toWav(
-  pcmData: Buffer,
-  channels = 1,
-  rate = 24000,
-  sampleWidth = 2
-): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const writer = new wav.Writer({
-      channels,
-      sampleRate: rate,
-      bitDepth: sampleWidth * 8,
-    });
-
-    let bufs = [] as any[];
-    writer.on('error', reject);
-    writer.on('data', function (d) {
-      bufs.push(d);
-    });
-    writer.on('end', function () {
-      resolve(Buffer.concat(bufs).toString('base64'));
-    });
-
-    writer.write(pcmData);
-    writer.end();
-  });
-}
 
 // Define the flow as a tool so the assistant can use it
 export const contentCreationTool = ai.defineTool(
