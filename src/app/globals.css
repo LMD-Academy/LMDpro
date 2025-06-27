@@ -69,14 +69,20 @@
   .prose h6 {
     @apply font-headline text-foreground;
   }
+  .prose h1 {
+     @apply mt-12 scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl;
+  }
   .prose h2 {
-    @apply mt-10 scroll-m-20 border-b pb-2 text-2xl font-bold tracking-tight first:mt-0;
+    @apply mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0;
   }
   .prose h3 {
-    @apply mt-8 scroll-m-20 text-xl font-semibold tracking-tight;
+    @apply mt-8 scroll-m-20 text-2xl font-semibold tracking-tight;
+  }
+   .prose h4 {
+    @apply mt-6 scroll-m-20 text-xl font-semibold tracking-tight;
   }
   .prose p {
-    @apply leading-7 text-base text-muted-foreground [&:not(:first-child)]:mt-4;
+    @apply leading-7 text-base text-muted-foreground [&:not(:first-child)]:mt-6;
   }
   .prose a {
     @apply text-primary font-medium underline underline-offset-4 hover:text-primary/90;
@@ -85,7 +91,7 @@
     @apply font-semibold text-foreground;
   }
   .prose ul {
-    @apply my-4 ml-6 list-disc [&>li]:mt-2 text-muted-foreground;
+    @apply my-6 ml-6 list-disc [&>li]:mt-2 text-muted-foreground;
   }
   .prose ul > li::before {
     @apply hidden; /* Use default list-disc marker */

@@ -8,9 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { Play, Pause, Clock, FileQuestion, BookOpen, AlertCircle } from "lucide-react";
-import { createEducationalContent } from '@/ai/flows/automated-content-creation';
-import Image from 'next/image';
+import { Play, Pause, Clock, FileQuestion, BookOpen } from "lucide-react";
 
 // Placeholder for module content. In a real app, this would be fetched based on the slug.
 const moduleContent = {
@@ -62,37 +60,16 @@ export default function ModulePage() {
   const params = useParams();
   const slug = Array.isArray(params.slug) ? params.slug.join('/') : params.slug || '';
   
-  const formattedTitle = slug
-    .split('-')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
-  
-  const [audioSrc, setAudioSrc] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  // Construct a hypothetical audio path based on the slug.
+  // In a real app, you would have a mapping from slug to audio file.
+  const audioSrc = `/uploads/audio/module_1_1_content.mp3`;
+
   const [isPlaying, setIsPlaying] = useState(false);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [playbackRate, setPlaybackRate] = useState(1);
-  const [error, setError] = useState<string | null>(null);
 
   const audioRef = useRef<HTMLAudioElement>(null);
-
-  useEffect(() => {
-    const generateAudio = async () => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const { audioDataUri } = await createEducationalContent({ topic: moduleContent.title });
-        setAudioSrc(audioDataUri);
-      } catch (err) {
-        console.error("Failed to generate audio:", err);
-        setError("Failed to generate audio. Please try again later.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    generateAudio();
-  }, [slug]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -167,62 +144,38 @@ export default function ModulePage() {
       <Card className="flex-1 flex flex-col">
         <CardHeader>
           <CardTitle>Module Audio Player</CardTitle>
-          <CardDescription>Listen to an AI-generated narration of the module content.</CardDescription>
+          <CardDescription>Listen to the audio narration of the module content.</CardDescription>
           <div className="p-4 rounded-lg bg-muted/50 mt-4">
-            {isLoading ? (
-                <div className="flex items-center justify-center h-20">
-                    <Image src="/BG-Loading.gif" alt="AI generating audio..." width={48} height={48} unoptimized />
-                    <p className="ml-4 text-muted-foreground">Generating audio, please wait...</p>
-                </div>
-            ) : error ? (
-                <div className="flex items-center justify-center h-20 text-destructive">
-                    <AlertCircle className="h-6 w-6 mr-4" />
-                    <p>{error}</p>
-                </div>
-            ) : audioSrc ? (
-              <>
-                <audio ref={audioRef} src={audioSrc} preload="metadata" />
-                <div className="flex items-center gap-4">
-                  <Button onClick={togglePlayPause} size="icon" className="rounded-full h-12 w-12 shrink-0">
-                    {isPlaying ? <Pause className="h-6 w-6" /> : <Play className="h-6 w-6" />}
-                  </Button>
-                  <div className="flex-1 flex items-center gap-2">
-                     <span className="text-xs font-mono text-muted-foreground">{formatTime(currentTime)}</span>
-                     <Slider
-                        value={[currentTime]}
-                        max={duration || 100}
-                        step={1}
-                        onValueChange={handleSeek}
-                     />
-                     <span className="text-xs font-mono text-muted-foreground">{formatTime(duration)}</span>
-                  </div>
-                   <div className="flex items-center gap-2">
-                        <Clock className="h-4 w-4 text-muted-foreground" />
-                        <Select onValueChange={handlePlaybackRateChange} defaultValue="1.0">
-                             <SelectTrigger className="w-[80px]">
-                                <SelectValue placeholder="Speed" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="0.5">0.5x</SelectItem>
-                                <SelectItem value="1.0">1.0x</SelectItem>
-                                <SelectItem value="1.5">1.5x</SelectItem>
-                                <SelectItem value="2.0">2.0x</SelectItem>
-                            </SelectContent>
-                        </Select>
-                   </div>
-                    <Select defaultValue="algenib">
-                         <SelectTrigger className="w-[150px]">
-                            <SelectValue placeholder="Select Voice" />
+            <audio ref={audioRef} src={audioSrc} preload="metadata" />
+            <div className="flex items-center gap-4">
+              <Button onClick={togglePlayPause} size="icon" className="rounded-full h-12 w-12 shrink-0">
+                {isPlaying ? <Pause className="h-6 w-6" /> : <Play className="h-6 w-6" />}
+              </Button>
+              <div className="flex-1 flex items-center gap-2">
+                  <span className="text-xs font-mono text-muted-foreground">{formatTime(currentTime)}</span>
+                  <Slider
+                    value={[currentTime]}
+                    max={duration || 100}
+                    step={1}
+                    onValueChange={handleSeek}
+                  />
+                  <span className="text-xs font-mono text-muted-foreground">{formatTime(duration)}</span>
+              </div>
+                <div className="flex items-center gap-2">
+                    <Clock className="h-4 w-4 text-muted-foreground" />
+                    <Select onValueChange={handlePlaybackRateChange} defaultValue="1.0">
+                          <SelectTrigger className="w-[80px]">
+                            <SelectValue placeholder="Speed" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="algenib">Algenib (Default)</SelectItem>
-                            <SelectItem value="achernar">Achernar</SelectItem>
-                            <SelectItem value="enif">Enif</SelectItem>
+                            <SelectItem value="0.5">0.5x</SelectItem>
+                            <SelectItem value="1.0">1.0x</SelectItem>
+                            <SelectItem value="1.5">1.5x</SelectItem>
+                            <SelectItem value="2.0">2.0x</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
-              </>
-            ) : null}
+            </div>
           </div>
         </CardHeader>
         <CardContent className="flex-1 overflow-hidden">
