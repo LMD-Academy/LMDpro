@@ -41,12 +41,12 @@ const courses = [
     title: 'Agile Methodologies',
     description:
       'Master frameworks like Scrum and Kanban for adaptive project management.',
-    href: '/module/agile-methodologies',
+    href: '/module/agile-methodologies-frameworks',
   },
   {
     title: 'Foundations of Effective Leadership',
     description: 'Explore leadership styles, motivation, and team communication.',
-    href: '/module/foundations-of-effective-leadership',
+    href: '/module/mastering-situational-leadership-and-motivation',
   },
   {
     title: 'Data Science Specialization',
@@ -99,7 +99,7 @@ export function PublicHeader() {
                   size="sm"
                   asChild
                 >
-                  <Link href="#">
+                  <Link href="/library">
                     <Bot className="mr-2" /> Can&apos;t find a course? Build it!
                   </Link>
                 </Button>

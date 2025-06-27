@@ -1,50 +1,98 @@
-# Educatr - AI-Powered Learning Platform
 
-## Project Title and Description
+# LMDpro: AI eLearning Academy
 
-**Educatr** is an innovative AI-powered learning platform designed to personalize and enhance the educational experience. Leveraging the power of Artificial Intelligence, Educatr provides tailored learning paths, automated content creation, and insightful analytics to help learners achieve their goals more effectively.
+![LMDpro Dashboard Screenshot](/public/screenshots/dashboard.png)
 
-**Key Features:**
+**LMDpro** is a modern, open-source, AI-powered learning platform designed to personalize and accelerate professional development. Leveraging cutting-edge AI, LMDpro provides tailored learning paths, automated content creation, an intelligent resume builder, and an interactive learning environment to help users achieve their career goals effectively.
 
-*   **Personalized Learning Paths:** AI-driven recommendations create customized learning journeys based on individual progress, strengths, and weaknesses.
-*   **Automated Content Creation:** Generative AI assists in creating diverse educational materials, including quizzes, summaries, and explanations, freeing up educators' time.
-*   **Intelligent Assessment Generation:** AI algorithms generate assessments that adapt to the learner's level, providing a more accurate measure of understanding.
-*   **Comprehensive Analytics:** Detailed dashboards offer insights into learner performance and engagement, enabling data-driven decision-making.
-*   **Interactive Learning Environment:** A user-friendly interface with integrated tools like a notepad and AI assistant enhances the learning experience.
+## Key Features
 
-## Features
-
-*   AI-powered personalized learning path generation
-*   Automated generation of educational content (modules, quizzes, assessments)
-*   Adaptive assessment creation
-*   Learner progress tracking and analytics
-*   Integrated AI assistant for on-demand help
-*   Notepad for note-taking during learning
-*   Theming (light/dark mode)
-*   Authentication (Login/Register)
-*   Responsive design
+-   **AI-Powered Learning Paths:** Automatically generates personalized learning paths based on user profiles, identified skill gaps, and real-time performance data.
+-   **AI Content Creation:** Utilizes AI agents to research topics, write scripts, and generate audio narration for new educational content on demand.
+-   **Intelligent Resume Builder:** (Conceptual) Provides AI assistance to create and optimize resume descriptions with industry keywords. Skills from completed courses are automatically added.
+-   **Interactive Course Delivery:** Courses include text, AI-generated audio, interactive modules, and assessments. The platform supports gamification elements like badges and points.
+-   **Comprehensive Course Catalog:** Browse a rich catalog of courses organized by Fields, Majors, and Levels, from foundational studies to executive-level capstone programs.
+-   **AI Academic Research Agent:** An interactive AI agent in the Library to help users research topics, find publications, and identify trends.
+-   **Full-Featured Admin/IAM Dashboard:** Manage learners, assign courses, issue certificates, and monitor team progress from a dedicated admin console.
+-   **Printable Certificates:** A complete system for viewing and printing professional certificates for completed courses, majors, and fields of study.
+-   **Rich, SEO-Optimized Blog:** A full-featured blog with in-depth articles on AI, leadership, technology, and professional development to attract and engage users.
+-   **Modern, Responsive UI:** Built with Next.js, ShadCN UI, and Tailwind CSS for a beautiful, responsive experience in both light and dark modes.
 
 ## Screenshots
 
-*   **Homepage:**
-    ![Homepage Screenshot Placeholder](docs/screenshots/homepage.png)
-    *A placeholder image for the application's homepage.*
+-   **Homepage:**
+    ![Homepage Screenshot](/public/screenshots/homepage.png)
+    *The clean and modern landing page for LMDpro.*
 
-*   **Dashboard:**
-    ![Dashboard Screenshot Placeholder](docs/screenshots/dashboard.png)
-    *A placeholder image for the user dashboard.*
+-   **Course Catalog:**
+    ![Course Catalog Screenshot](/public/screenshots/courses.png)
+    *Browse the extensive catalog of courses with advanced filtering.*
 
-*   **Learning Module:**
-    ![Learning Module Screenshot Placeholder](docs/screenshots/module.png)
-    *A placeholder image showing a typical learning module interface.*
+-   **Module View:**
+    ![Learning Module Screenshot](/public/screenshots/module.png)
+    *Engage with interactive course content with an integrated AI audio player.*
 
-*   **AI Assistant:**
-    ![AI Assistant Screenshot Placeholder](docs/screenshots/ai-assistant.png)
-    *A placeholder image of the integrated AI assistant.*
+-   **AI Assistant & Library:**
+    ![AI Assistant Screenshot](/public/screenshots/library.png)
+    *Use the powerful AI research agent to explore topics and get answers.*
+
+## Technology Stack
+
+LMDpro is built with a modern, powerful, and scalable technology stack:
+
+-   **Framework:** [Next.js](https://nextjs.org/) (with App Router)
+-   **Language:** [TypeScript](https://www.typescriptlang.org/)
+-   **AI / Backend:** [Genkit (Firebase)](https://firebase.google.com/docs/genkit)
+-   **UI Components:** [ShadCN UI](https://ui.shadcn.com/)
+-   **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+-   **Deployment:** Ready for Vercel, Firebase App Hosting, or any Node.js environment.
 
 ## Installation and Setup
 
 To get a local copy up and running, follow these steps:
 
 1.  **Clone the repository:**
+    ```sh
+    git clone https://github.com/LMD-Academy/LMDpro.git
+    cd LMDpro
+    ```
 
+2.  **Install dependencies:**
+    ```sh
+    npm install
+    ```
+
+3.  **Set up environment variables:**
+    Create a `.env` file in the root of the project and add your necessary environment variables (e.g., Google AI API Key).
+    ```env
+    GOOGLE_API_KEY=YOUR_API_KEY_HERE
+    ```
+
+4.  **Run the development server:**
+    ```sh
+    npm run dev
+    ```
+
+5.  **Run the Genkit development server (in a separate terminal):**
+    This starts the Genkit AI flows and makes them available to the Next.js application.
+    ```sh
+    npm run genkit:watch
+    ```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Contributing
+
+We welcome contributions from the community! If you'd like to contribute, please follow these steps:
+
+1.  Fork the repository.
+2.  Create a new branch (`git checkout -b feature/YourAmazingFeature`).
+3.  Commit your changes (`git commit -m 'Add some YourAmazingFeature'`).
+4.  Push to the branch (`git push origin feature/YourAmazingFeature`).
+5.  Open a Pull Request.
+
+Please read our `CONTRIBUTING.md` file for more details on our code of conduct and the process for submitting pull requests.
+
+## License
+
+This project is licensed under the MIT License - see the `LICENSE` file for details.

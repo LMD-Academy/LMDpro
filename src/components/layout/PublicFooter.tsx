@@ -4,11 +4,11 @@ import Link from 'next/link';
 
 export function PublicFooter() {
   const links = [
-    { name: 'About', href: '#' },
+    { name: 'Courses', href: '/courses' },
     { name: 'Pricing', href: '/pricing' },
     { name: 'Blog', href: '/blog' },
     { name: 'Developers', href: '/dev' },
-    { name: 'Contact', href: '#' },
+    { name: 'Docs', href: '/docs' },
     { name: 'Terms', href: '#' },
     { name: 'Privacy', href: '#' },
   ];
