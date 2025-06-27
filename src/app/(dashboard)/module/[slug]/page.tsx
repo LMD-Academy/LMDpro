@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { Play, Pause, Clock, FileQuestion, BookOpen } from "lucide-react";
+import { Play, Pause, Clock, FileQuestion, BookOpen, VolumeX, AlertTriangle } from "lucide-react";
 
 // Placeholder for module content. In a real app, this would be fetched based on the slug.
 const moduleContent = {
@@ -60,14 +60,13 @@ export default function ModulePage() {
   const params = useParams();
   const slug = Array.isArray(params.slug) ? params.slug.join('/') : params.slug || '';
   
-  // Construct a hypothetical audio path based on the slug.
-  // In a real app, you would have a mapping from slug to audio file.
-  const audioSrc = `/uploads/audio/module_1_1_content.mp3`;
+  const audioSrc = slug ? `/uploads/audio/${slug}.mp3` : '';
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [playbackRate, setPlaybackRate] = useState(1);
+  const [audioError, setAudioError] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement>(null);
 
@@ -77,24 +76,28 @@ export default function ModulePage() {
       const setAudioData = () => {
         setDuration(audio.duration);
         setCurrentTime(audio.currentTime);
+        setAudioError(false);
       };
       const setAudioTime = () => setCurrentTime(audio.currentTime);
       const handleEnded = () => setIsPlaying(false);
+      const handleError = () => setAudioError(true);
 
       audio.addEventListener('loadeddata', setAudioData);
       audio.addEventListener('timeupdate', setAudioTime);
       audio.addEventListener('ended', handleEnded);
+      audio.addEventListener('error', handleError);
 
       return () => {
         audio.removeEventListener('loadeddata', setAudioData);
         audio.removeEventListener('timeupdate', setAudioTime);
         audio.removeEventListener('ended', handleEnded);
+        audio.removeEventListener('error', handleError);
       };
     }
   }, [audioSrc]);
 
   const togglePlayPause = () => {
-    if (audioRef.current) {
+    if (audioRef.current && !audioError) {
       if (isPlaying) {
         audioRef.current.pause();
       } else {
@@ -122,14 +125,14 @@ export default function ModulePage() {
   };
 
   const handleSeek = (value: number[]) => {
-    if (audioRef.current) {
+    if (audioRef.current && !audioError) {
         audioRef.current.currentTime = value[0];
         setCurrentTime(value[0]);
     }
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-8rem)]">
+    <div className="flex flex-col h-full">
       <header className="mb-4 flex justify-between items-center">
         <div>
             <h1 className="text-3xl font-bold tracking-tight">{moduleContent.title}</h1>
@@ -148,8 +151,8 @@ export default function ModulePage() {
           <div className="p-4 rounded-lg bg-muted/50 mt-4">
             <audio ref={audioRef} src={audioSrc} preload="metadata" />
             <div className="flex items-center gap-4">
-              <Button onClick={togglePlayPause} size="icon" className="rounded-full h-12 w-12 shrink-0">
-                {isPlaying ? <Pause className="h-6 w-6" /> : <Play className="h-6 w-6" />}
+              <Button onClick={togglePlayPause} size="icon" className="rounded-full h-12 w-12 shrink-0" disabled={audioError}>
+                {audioError ? <VolumeX className="h-6 w-6"/> : (isPlaying ? <Pause className="h-6 w-6" /> : <Play className="h-6 w-6" />)}
               </Button>
               <div className="flex-1 flex items-center gap-2">
                   <span className="text-xs font-mono text-muted-foreground">{formatTime(currentTime)}</span>
@@ -158,12 +161,13 @@ export default function ModulePage() {
                     max={duration || 100}
                     step={1}
                     onValueChange={handleSeek}
+                    disabled={audioError}
                   />
                   <span className="text-xs font-mono text-muted-foreground">{formatTime(duration)}</span>
               </div>
                 <div className="flex items-center gap-2">
                     <Clock className="h-4 w-4 text-muted-foreground" />
-                    <Select onValueChange={handlePlaybackRateChange} defaultValue="1.0">
+                    <Select onValueChange={handlePlaybackRateChange} defaultValue="1.0" disabled={audioError}>
                           <SelectTrigger className="w-[80px]">
                             <SelectValue placeholder="Speed" />
                         </SelectTrigger>
@@ -176,6 +180,12 @@ export default function ModulePage() {
                     </Select>
                 </div>
             </div>
+            {audioError && (
+                 <div className="mt-3 text-sm text-destructive flex items-center gap-2">
+                    <AlertTriangle size={16} />
+                    <p>Audio file not found or failed to load for this module.</p>
+                </div>
+            )}
           </div>
         </CardHeader>
         <CardContent className="flex-1 overflow-hidden">
