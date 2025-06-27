@@ -62,3 +62,14 @@ const generateLearningPathFlow = ai.defineFlow(
     return output!;
   }
 );
+
+// Define the flow as a tool so the assistant can use it
+export const learningPathTool = ai.defineTool(
+  {
+    name: 'generateLearningPath',
+    description: 'Generates a personalized learning path based on a user\'s profile, skill gaps, and performance.',
+    inputSchema: GenerateLearningPathInputSchema,
+    outputSchema: GenerateLearningPathOutputSchema,
+  },
+  async (input) => generateLearningPathFlow(input)
+);

@@ -161,3 +161,17 @@ async function toWav(
     writer.end();
   });
 }
+
+// Define the flow as a tool so the assistant can use it
+export const contentCreationTool = ai.defineTool(
+    {
+        name: 'createEducationalContent',
+        description: 'Researches a topic and writes a script for an educational video.',
+        inputSchema: CreateEducationalContentInputSchema,
+        outputSchema: z.object({ script: z.string() }), // Just return the script for the chat
+    },
+    async (input) => {
+        const result = await createEducationalContentFlow(input);
+        return { script: result.script };
+    }
+);
