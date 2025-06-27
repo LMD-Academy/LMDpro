@@ -2,7 +2,7 @@
 import { cn } from '@/lib/utils';
 import { ClipboardCopy } from 'lucide-react';
 import { Button } from '../ui/button';
-import { useToast } from '../ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 
 interface CodeBlockProps {
   children: React.ReactNode;
