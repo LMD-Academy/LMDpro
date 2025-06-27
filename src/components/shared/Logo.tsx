@@ -19,7 +19,6 @@ export function Logo({ className, showText = true }: LogoProps) {
     setMounted(true);
   }, []);
 
-  // Use resolvedTheme to handle 'system' theme preference correctly.
   const logoSrc =
     resolvedTheme === 'dark'
       ? '/LMDpro Logo White.svg'
