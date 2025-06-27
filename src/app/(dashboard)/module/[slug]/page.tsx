@@ -110,15 +110,7 @@ export default function ModulePage() {
   const params = useParams();
   const slug = Array.isArray(params.slug) ? params.slug.join('/') : params.slug || '';
   
-  const [moduleData, setModuleData] = useState<{ title: string; audioSrc: string; paragraphs: any[] } | null | undefined>(undefined);
-
-  useEffect(() => {
-    if (slug) {
-      const data = modulesData[slug];
-      setModuleData(data || null); // Set to null if not found
-    }
-  }, [slug]);
-
+  const [isClient, setIsClient] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
@@ -126,18 +118,32 @@ export default function ModulePage() {
   const [audioError, setAudioError] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement>(null);
+  const moduleData = modulesData[slug] || null;
 
-  // Effect for handling audio element events
+  useEffect(() => {
+    // This effect runs once on mount to confirm we are on the client side.
+    // This helps prevent hydration errors with the audio player.
+    setIsClient(true);
+  }, []);
+
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
+
+    // Reset state when the audio source changes (due to key change on the audio element)
+    setAudioError(false);
+    setIsPlaying(false);
+    setCurrentTime(0);
+    setDuration(0);
 
     const setAudioData = () => {
       setDuration(audio.duration);
       setCurrentTime(audio.currentTime);
     };
+
     const setAudioTime = () => setCurrentTime(audio.currentTime);
     const handleEnded = () => setIsPlaying(false);
+
     const handleError = (e: Event) => {
       const audioEl = e.target as HTMLAudioElement;
       const error = audioEl.error;
@@ -157,7 +163,7 @@ export default function ModulePage() {
             errorDetails = "The audio could not be loaded, either because the server or network failed or because the format is not supported.";
             break;
           default:
-            errorDetails = `An unknown error occurred. Code: ${error.code}. Message: ${error.message}`;
+            errorDetails = `An unknown error occurred. Code: ${error.code}. Message: ${error.message || 'No message.'}`;
             break;
         }
       }
@@ -170,24 +176,8 @@ export default function ModulePage() {
     audio.addEventListener('ended', handleEnded);
     audio.addEventListener('error', handleError);
 
-    // If moduleData has been resolved (i.e., not undefined)
-    if (moduleData !== undefined) {
-      // Reset state for new module or if module is not found
-      setAudioError(false);
-      setIsPlaying(false);
-      setCurrentTime(0);
-      setDuration(0);
-
-      const audioSrc = moduleData?.audioSrc;
-      const absoluteSrc = audioSrc ? new URL(audioSrc, window.location.origin).href : '';
-
-      if (audio.src !== absoluteSrc) {
-        audio.src = absoluteSrc;
-        if (audioSrc) {
-          audio.load();
-        }
-      }
-    }
+    // Set playback rate on the new audio element
+    audio.playbackRate = playbackRate;
 
     return () => {
       audio.removeEventListener('loadeddata', setAudioData);
@@ -195,8 +185,7 @@ export default function ModulePage() {
       audio.removeEventListener('ended', handleEnded);
       audio.removeEventListener('error', handleError);
     };
-  }, [moduleData]);
-
+  }, [slug, playbackRate]); // Re-run effect if slug or playbackRate changes.
 
   const togglePlayPause = () => {
     if (audioRef.current && !audioError) {
@@ -215,9 +204,6 @@ export default function ModulePage() {
   const handlePlaybackRateChange = (rate: string) => {
       const newRate = parseFloat(rate);
       setPlaybackRate(newRate);
-      if(audioRef.current) {
-          audioRef.current.playbackRate = newRate;
-      }
   }
   
   const formatTime = (time: number) => {
@@ -236,7 +222,7 @@ export default function ModulePage() {
     }
   }
 
-  if (moduleData === undefined) {
+  if (!isClient) {
     return (
         <div className="flex items-center justify-center h-full">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -272,7 +258,14 @@ export default function ModulePage() {
           <CardTitle>Module Audio Player</CardTitle>
           <CardDescription>Listen to the audio narration of the module content.</CardDescription>
           <div className="p-4 rounded-lg bg-muted/50 mt-4">
-            <audio ref={audioRef} preload="metadata" />
+            {/* Declaratively setting src and key to force re-render on navigation */}
+            <audio
+              key={slug} 
+              ref={audioRef}
+              src={moduleData.audioSrc}
+              preload="metadata"
+            />
+            
             <div className="flex items-center gap-4">
               <Button onClick={togglePlayPause} size="icon" className="rounded-full h-12 w-12 shrink-0" disabled={audioError || !moduleData.audioSrc}>
                 {audioError ? <VolumeX className="h-6 w-6"/> : (isPlaying ? <Pause className="h-6 w-6" /> : <Play className="h-6 w-6" />)}
