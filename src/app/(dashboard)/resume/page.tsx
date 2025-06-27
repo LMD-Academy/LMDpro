@@ -16,12 +16,16 @@ import {
   Printer,
   Loader2,
   BrainCircuit,
+  GraduationCap,
+  Sparkles,
+  Book,
 } from 'lucide-react';
 import { ResumePreview } from '@/components/dashboard/resume/ResumePreview';
 import type { ResumeData } from '@/components/dashboard/resume/ResumePreview';
-import { generateResumeText, GenerateResumeTextInput } from '@/ai/flows/resume-builder-flow';
+import { generateResumeText } from '@/ai/flows/resume-builder-flow';
+import type { GenerateResumeTextInput } from '@/ai/flows/resume-builder-flow';
 import { useToast } from '@/hooks/use-toast';
-import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
 
 const initialResumeData: ResumeData = {
@@ -37,7 +41,7 @@ const initialResumeData: ResumeData = {
     { id: 1, title: '', company: '', duration: '', responsibilities: '', bullets: [] },
   ],
   education: [{ id: 1, degree: '', institution: '', duration: '' }],
-  skills: [''],
+  skills: [],
   completedCourses: [],
 };
 
@@ -51,8 +55,8 @@ const sampleResumeData: ResumeData = {
     },
     summary: "Experienced Senior Software Engineer with over 8 years of expertise in full-stack development, specializing in building scalable web applications with React, Node.js, and cloud-native technologies on AWS. Proven track record of leading development teams, mentoring junior engineers, and delivering high-quality software on time. Passionate about clean code, agile methodologies, and leveraging AI to solve complex problems.",
     experience: [
-        { id: 1, title: 'Senior Software Engineer', company: 'Innovatech Solutions', duration: '2020 - Present', responsibilities: 'Lead developer on the flagship SaaS product. Responsible for architecture design, feature implementation, and mentoring a team of 4 junior developers. Worked with React, TypeScript, Node.js, and AWS services.', bullets: [] },
-        { id: 2, title: 'Software Engineer', company: 'TechGurus Inc.', duration: '2016 - 2020', responsibilities: 'Full-stack developer for various client projects. Built responsive user interfaces and robust backend APIs. Contributed to database design and maintenance.', bullets: [] },
+        { id: 1, title: 'Senior Software Engineer', company: 'Innovatech Solutions', duration: '2020 - Present', responsibilities: 'Lead developer on the flagship SaaS product. Responsible for architecture design, feature implementation, and mentoring a team of 4 junior developers. Worked with React, TypeScript, Node.js, and AWS services.', bullets: ["Architected and led the development of a multi-tenant SaaS platform, increasing scalability to support a 200% growth in user base over 18 months.", "Mentored a team of 4 junior engineers, improving team velocity by 25% through code reviews, pair programming, and establishing best practices.", "Reduced API response times by 40% by implementing performance optimizations and a Redis caching layer."] },
+        { id: 2, title: 'Software Engineer', company: 'TechGurus Inc.', duration: '2016 - 2020', responsibilities: 'Full-stack developer for various client projects. Built responsive user interfaces and robust backend APIs. Contributed to database design and maintenance.', bullets: ["Delivered 15+ client projects on time and on budget, resulting in a 95% client satisfaction rate.", "Developed and maintained RESTful APIs using Node.js and Express, serving over 1 million requests per day.", "Collaborated with UX/UI designers to create responsive and accessible user interfaces using React, improving user engagement by 30%."] },
     ],
     education: [
         { id: 1, degree: 'B.S. in Computer Science', institution: 'University of Technology', duration: '2012 - 2016' },
@@ -64,7 +68,7 @@ const sampleResumeData: ResumeData = {
     ],
 };
 
-const completedCoursesData = [
+const lmdProCourses = [
     'Advanced Data Analysis',
     'Project Management for Tech',
     'Cloud Fundamentals',
@@ -98,6 +102,26 @@ export default function ResumeBuilderPage() {
         experience: prev.experience.map(exp => exp.id === id ? {...exp, [name]: value} : exp)
     }));
   };
+  
+  const handleEducationChange = (id: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setResumeData(prev => ({
+        ...prev,
+        education: prev.education.map(edu => edu.id === id ? {...edu, [name]: value} : edu)
+    }));
+  };
+  
+  const handleSkillsChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const skillsArray = e.target.value.split(',').map(s => s.trim());
+    setResumeData(prev => ({...prev, skills: skillsArray}));
+  }
+
+  const handleCourseToggle = (course: string, checked: boolean) => {
+      setResumeData(prev => ({
+          ...prev,
+          completedCourses: checked ? [...prev.completedCourses, course] : prev.completedCourses.filter(c => c !== course)
+      }));
+  }
 
   const addExperience = () => {
     setResumeData(prev => ({
@@ -110,6 +134,20 @@ export default function ResumeBuilderPage() {
     setResumeData(prev => ({
         ...prev,
         experience: prev.experience.filter(exp => exp.id !== id)
+    }));
+  };
+
+  const addEducation = () => {
+    setResumeData(prev => ({
+        ...prev,
+        education: [...prev.education, {id: Date.now(), degree: '', institution: '', duration: '' }]
+    }));
+  };
+
+  const removeEducation = (id: number) => {
+    setResumeData(prev => ({
+        ...prev,
+        education: prev.education.filter(edu => edu.id !== id)
     }));
   };
   
@@ -138,7 +176,11 @@ export default function ResumeBuilderPage() {
                   title: exp.title,
                   company: exp.company,
                   responsibilities: exp.responsibilities
-              }))
+              })),
+              education: resumeData.education.map(edu => ({
+                  degree: edu.degree,
+                  institution: edu.institution
+              })),
           };
 
           const result = await generateResumeText(input);
@@ -237,6 +279,22 @@ export default function ResumeBuilderPage() {
 
             <Card>
                 <CardHeader>
+                    <CardTitle className="flex items-center gap-2"><Sparkles size={20}/> Skills</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <Label htmlFor="skills">Key Skills</Label>
+                    <Textarea 
+                        id="skills" 
+                        placeholder="Enter skills separated by commas, e.g., JavaScript, React, Node.js"
+                        value={resumeData.skills.join(', ')}
+                        onChange={handleSkillsChange}
+                        rows={3}
+                    />
+                </CardContent>
+            </Card>
+
+            <Card>
+                <CardHeader>
                     <CardTitle>Work Experience</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -280,6 +338,55 @@ export default function ResumeBuilderPage() {
                     <Button variant="outline" onClick={addExperience} className="w-full">
                         <PlusCircle className="mr-2 h-4 w-4"/> Add Experience
                     </Button>
+                </CardContent>
+            </Card>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2"><GraduationCap size={20}/> Education</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    {resumeData.education.map((edu, index) => (
+                        <div key={edu.id} className="p-4 border rounded-lg space-y-3 relative">
+                             <Button variant="ghost" size="icon" className="absolute top-2 right-2 h-7 w-7" onClick={() => removeEducation(edu.id)}>
+                                <Trash2 className="h-4 w-4 text-destructive" />
+                             </Button>
+                            <div className="space-y-1">
+                                <Label htmlFor={`degree-${edu.id}`}>Degree / Certificate</Label>
+                                <Input id={`degree-${edu.id}`} name="degree" value={edu.degree} onChange={(e) => handleEducationChange(edu.id, e)} />
+                            </div>
+                             <div className="space-y-1">
+                                <Label htmlFor={`institution-${edu.id}`}>Institution</Label>
+                                <Input id={`institution-${edu.id}`} name="institution" value={edu.institution} onChange={(e) => handleEducationChange(edu.id, e)} />
+                            </div>
+                            <div className="space-y-1">
+                                <Label htmlFor={`duration-edu-${edu.id}`}>Duration</Label>
+                                <Input id={`duration-edu-${edu.id}`} name="duration" placeholder="e.g., 2016 - 2020" value={edu.duration} onChange={(e) => handleEducationChange(edu.id, e)} />
+                            </div>
+                        </div>
+                    ))}
+                    <Button variant="outline" onClick={addEducation} className="w-full">
+                        <PlusCircle className="mr-2 h-4 w-4"/> Add Education
+                    </Button>
+                </CardContent>
+            </Card>
+            
+            <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2"><Book size={20}/> LMDpro Certifications</CardTitle>
+                    <p className='text-sm text-muted-foreground'>Add your completed LMDpro courses to your resume.</p>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                    {lmdProCourses.map(course => (
+                        <div key={course} className='flex items-center space-x-2'>
+                            <Checkbox 
+                                id={`course-${course}`}
+                                onCheckedChange={(checked) => handleCourseToggle(course, !!checked)}
+                                checked={resumeData.completedCourses.includes(course)}
+                            />
+                            <Label htmlFor={`course-${course}`}>{course}</Label>
+                        </div>
+                    ))}
                 </CardContent>
             </Card>
 

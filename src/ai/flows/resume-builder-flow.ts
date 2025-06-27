@@ -10,20 +10,40 @@
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
 
-const GenerateResumeTextInputSchema = z.object({
+export const GenerateResumeTextInputSchema = z.object({
   jobTitle: z.string().describe("The user's current or desired job title."),
-  yearsOfExperience: z.number().describe("The user's years of experience in the role."),
+  yearsOfExperience: z
+    .number()
+    .describe("The user's years of experience in the role."),
   skills: z.array(z.string()).describe("A list of the user's key skills."),
-  jobDescription: z.string().optional().describe('A specific job description to tailor the resume for.'),
-  previousRoles: z.array(z.object({
-    title: z.string(),
-    company: z.string(),
-    responsibilities: z.string(),
-  })).describe("Details about the user's previous roles."),
+  jobDescription: z
+    .string()
+    .optional()
+    .describe('A specific job description to tailor the resume for.'),
+  previousRoles: z
+    .array(
+      z.object({
+        title: z.string(),
+        company: z.string(),
+        responsibilities: z.string(),
+      })
+    )
+    .describe("Details about the user's previous roles."),
+  education: z
+    .array(
+      z.object({
+        degree: z.string(),
+        institution: z.string(),
+      })
+    )
+    .optional()
+    .describe("Details about the user's education."),
 });
-export type GenerateResumeTextInput = z.infer<typeof GenerateResumeTextInputSchema>;
+export type GenerateResumeTextInput = z.infer<
+  typeof GenerateResumeTextInputSchema
+>;
 
-const GenerateResumeTextOutputSchema = z.object({
+export const GenerateResumeTextOutputSchema = z.object({
   professionalSummary: z
     .string()
     .describe('A professionally written, concise professional summary.'),
@@ -38,19 +58,27 @@ const GenerateResumeTextOutputSchema = z.object({
       'An array of objects, each containing professionally written, achievement-oriented bullet points for a corresponding previous role.'
     ),
 });
-export type GenerateResumeTextOutput = z.infer<typeof GenerateResumeTextOutputSchema>;
+export type GenerateResumeTextOutput = z.infer<
+  typeof GenerateResumeTextOutputSchema
+>;
 
 const prompt = ai.definePrompt({
-    name: 'generateResumeTextPrompt',
-    model: 'googleai/gemini-2.0-flash',
-    input: { schema: GenerateResumeTextInputSchema },
-    output: { schema: GenerateResumeTextOutputSchema },
-    prompt: `You are an expert career coach and professional resume writer. Your task is to generate compelling resume content based on the user's provided information.
+  name: 'generateResumeTextPrompt',
+  model: 'googleai/gemini-2.0-flash',
+  input: { schema: GenerateResumeTextInputSchema },
+  output: { schema: GenerateResumeTextOutputSchema },
+  prompt: `You are an expert career coach and professional resume writer. Your task is to generate compelling resume content based on the user's provided information.
 
     **User Information:**
     - Desired Job Title: {{{jobTitle}}}
     - Years of Experience: {{{yearsOfExperience}}}
     - Key Skills: {{{skills}}}
+    {{#if education}}
+    - Education:
+    {{#each education}}
+      - {{this.degree}} at {{this.institution}}
+    {{/each}}
+    {{/if}}
     {{#if jobDescription}}- Target Job Description: {{{jobDescription}}}{{/if}}
     - Previous Roles:
     {{#each previousRoles}}

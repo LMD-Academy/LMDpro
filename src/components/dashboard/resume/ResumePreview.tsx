@@ -1,6 +1,6 @@
 'use client';
 
-import { Mail, Phone, MapPin, Linkedin, Github } from 'lucide-react';
+import { Mail, Phone, MapPin } from 'lucide-react';
 import React from 'react';
 
 export interface ResumeData {
@@ -37,13 +37,18 @@ interface ResumePreviewProps {
 export const ResumePreview: React.FC<ResumePreviewProps> = ({ data }) => {
   const { personalInfo, summary, experience, education, skills, completedCourses } = data;
 
+  const hasExperience = experience.length > 0 && experience[0]?.title;
+  const hasEducation = education.length > 0 && education[0]?.degree;
+  const hasSkills = skills.length > 0 && skills[0]?.trim() !== '';
+  const hasCourses = completedCourses.length > 0;
+
   return (
-    <div className="bg-white text-gray-800 shadow-lg print:shadow-none w-[210mm] h-[297mm] p-8 mx-auto font-sans">
+    <div className="bg-white text-gray-800 shadow-lg print:shadow-none w-[210mm] min-h-[297mm] p-8 mx-auto font-sans">
       {/* Header */}
       <header className="text-center mb-6">
         {personalInfo.name && <h1 className="text-4xl font-bold tracking-tight text-gray-900">{personalInfo.name}</h1>}
         {personalInfo.jobTitle && <p className="text-xl text-primary font-medium">{personalInfo.jobTitle}</p>}
-        <div className="flex justify-center items-center gap-4 text-xs text-gray-600 mt-2">
+        <div className="flex justify-center items-center flex-wrap gap-x-4 gap-y-1 text-xs text-gray-600 mt-2">
             {personalInfo.email && <span className="flex items-center gap-1.5"><Mail size={12}/> {personalInfo.email}</span>}
             {personalInfo.phone && <span className="flex items-center gap-1.5"><Phone size={12}/> {personalInfo.phone}</span>}
             {personalInfo.location && <span className="flex items-center gap-1.5"><MapPin size={12}/> {personalInfo.location}</span>}
@@ -59,7 +64,7 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ data }) => {
       )}
 
       {/* Experience */}
-      {experience.length > 0 && experience[0].title && (
+      {hasExperience && (
         <section className="mb-6">
             <h2 className="text-lg font-bold text-primary border-b-2 border-primary/30 pb-1 mb-2">WORK EXPERIENCE</h2>
             {experience.map(exp => exp.title && (
@@ -80,31 +85,34 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ data }) => {
       )}
 
       {/* Skills & LMDpro Courses */}
-      <div className="grid grid-cols-2 gap-8 mb-6">
-        {skills.length > 0 && skills[0] && (
-          <section>
-              <h2 className="text-lg font-bold text-primary border-b-2 border-primary/30 pb-1 mb-2">SKILLS</h2>
-              <div className="flex flex-wrap gap-2 mt-2">
-                  {skills.map((skill, index) => skill.trim() && (
-                      <span key={index} className="bg-muted text-gray-700 text-xs font-medium px-2.5 py-1 rounded-full">{skill}</span>
-                  ))}
-              </div>
-          </section>
-        )}
-        {completedCourses.length > 0 && (
-          <section>
-              <h2 className="text-lg font-bold text-primary border-b-2 border-primary/30 pb-1 mb-2">LMDPRO CERTIFICATIONS</h2>
-              <ul className="list-disc pl-5 mt-1 space-y-1">
-                  {completedCourses.map((course, index) => (
-                      <li key={index} className="text-sm">{course}</li>
-                  ))}
-              </ul>
-          </section>
-        )}
-      </div>
+      {(hasSkills || hasCourses) && (
+        <div className="grid grid-cols-2 gap-8 mb-6">
+            {hasSkills && (
+            <section>
+                <h2 className="text-lg font-bold text-primary border-b-2 border-primary/30 pb-1 mb-2">SKILLS</h2>
+                <div className="flex flex-wrap gap-2 mt-2">
+                    {skills.map((skill, index) => skill.trim() && (
+                        <span key={index} className="bg-muted text-gray-700 text-xs font-medium px-2.5 py-1 rounded-full">{skill}</span>
+                    ))}
+                </div>
+            </section>
+            )}
+            {hasCourses && (
+            <section>
+                <h2 className="text-lg font-bold text-primary border-b-2 border-primary/30 pb-1 mb-2">LMDPRO CERTIFICATIONS</h2>
+                <ul className="list-disc pl-5 mt-1 space-y-1">
+                    {completedCourses.map((course, index) => (
+                        <li key={index} className="text-sm">{course}</li>
+                    ))}
+                </ul>
+            </section>
+            )}
+        </div>
+      )}
+
 
       {/* Education */}
-      {education.length > 0 && education[0].degree && (
+      {hasEducation && (
         <section>
             <h2 className="text-lg font-bold text-primary border-b-2 border-primary/30 pb-1 mb-2">EDUCATION</h2>
             {education.map(edu => edu.degree && (
