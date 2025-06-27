@@ -1,4 +1,4 @@
-
+import * as React from 'react';
 import { CheckCircle } from 'lucide-react';
 
 interface KeyTakeawaysProps {
