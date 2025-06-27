@@ -189,3 +189,21 @@
   box-shadow: 8px 8px 0px 0px hsl(var(--accent));
   transform: translate(-3px, -3px);
 }
+
+@media print {
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .no-print {
+    display: none;
+  }
+  main, .print-container {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  @page {
+    size: A4 landscape;
+    margin: 0;
+  }
+}

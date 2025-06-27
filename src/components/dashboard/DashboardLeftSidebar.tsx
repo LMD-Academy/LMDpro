@@ -16,6 +16,7 @@ import {
   LogOut,
   Library,
   BookOpenCheck,
+  Award
 } from 'lucide-react';
 import { Logo } from '@/components/shared/Logo';
 import Link from 'next/link';
@@ -25,6 +26,7 @@ const menuItems = [
   { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { href: '/courses', icon: GraduationCap, label: 'Course Catalog' },
   { href: '/library', icon: Library, label: 'Academic Research' },
+  { href: '/certificates', icon: Award, label: 'My Certificates' },
   { href: '/docs', icon: BookOpenCheck, label: 'Documentations' },
 ];
 
@@ -45,7 +47,7 @@ export function DashboardLeftSidebar() {
                 href={item.href}
                 asChild
                 tooltip={item.label}
-                isActive={pathname === item.href}
+                isActive={pathname.startsWith(item.href) && (item.href !== '/dashboard' || pathname === '/dashboard')}
               >
                 <Link href={item.href}>
                   <item.icon />
