@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -18,10 +22,22 @@
         "name": "next"
       }
     ],
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/Study/EducationalMaterial/Quizzes/04_Advanced_Leadership_Theories_for_Navigating_Ambiguity_Quiz.md",
+    "src/Study/EducationalMaterial/Quizzes/05_Corporate_Governance_Ethical_Leadership_at_Senior_Levels_Quiz.md"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
