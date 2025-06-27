@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -60,14 +61,16 @@ export function DashboardLeftSidebar() {
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton href="/" asChild tooltip="Logout" variant="ghost">
-              <Link href="/">
-                <LogOut />
-                <span>Logout</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+          {state === 'expanded' && (
+            <SidebarMenuItem>
+              <SidebarMenuButton href="/" asChild tooltip="Logout" variant="ghost">
+                <Link href="/">
+                  <LogOut />
+                  <span>Logout</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          )}
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
