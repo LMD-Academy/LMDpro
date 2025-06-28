@@ -24,17 +24,13 @@
     ![Homepage Screenshot](/screenshots/homepage.png)
     *The clean and modern landing page for LMDpro.*
 
+-   **Dashboard:**
+    ![Dashboard Screenshot](/screenshots/dashboard.png)
+    *The clean and modern Dashboard page for LMDpro.*    
+
 -   **Course Catalog:**
     ![Course Catalog Screenshot](/screenshots/catalog.png)
     *Browse the extensive catalog of courses with advanced filtering.*
-
--   **Module View:**
-    ![Learning Module Screenshot](/screenshots/module.png)
-    *Engage with interactive course content with an integrated audio player.*
-
--   **AI Assistant & Library:**
-    ![AI Assistant Screenshot](/screenshots/library.png)
-    *Use the powerful AI research agent to explore topics and get answers.*
 
 ## Technology Stack
 
