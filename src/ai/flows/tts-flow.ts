@@ -63,7 +63,7 @@ const textToSpeechFlow = ai.defineFlow(
     outputSchema: TextToSpeechOutputSchema,
   },
   async ({text}) => {
-    if (!text) {
+    if (!text || text.trim().length === 0) {
       throw new Error('Input text cannot be empty.');
     }
 

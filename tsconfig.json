@@ -35,7 +35,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/Study/EducationalMaterial/Quizzes/04_Advanced_Leadership_Theories_for_Navigating_Ambiguity_Quiz.md",
-    "src/Study/EducationalMaterial/Quizzes/05_Corporate_Governance_Ethical_Leadership_at_Senior_Levels_Quiz.md"
+    "src/Study/EducationalMaterial/Quizzes/05_Corporate_Governance_Ethical_Leadership_at_Senior_Levels_Quiz.md",
+    "src/types/wav.d.ts"
   ],
   "exclude": [
     "node_modules"

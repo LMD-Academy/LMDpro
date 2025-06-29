@@ -8,15 +8,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { Play, Pause, Clock, FileQuestion, BookOpen, VolumeX, AlertTriangle, Loader2 } from "lucide-react";
+import { Play, Pause, Clock, FileQuestion, BookOpen, VolumeX, AlertTriangle, Loader2, Wand2 } from "lucide-react";
 import { modulesData } from '@/lib/modules-data';
 import { useToast } from '@/hooks/use-toast';
+import { textToSpeech } from '@/ai/flows/tts-flow';
 
 export default function ModulePage() {
   const params = useParams();
   const slug = Array.isArray(params.slug) ? params.slug.join('/') : params.slug || '';
   
-  const [moduleData, setModuleData] = useState<{ title: string; paragraphs: any[], audioPath?: string } | null>(null);
+  const [moduleData, setModuleData] = useState<{ title: string; paragraphs: any[] } | null>(null);
   const [isLoadingModule, setIsLoadingModule] = useState(true);
 
   const [isPlaying, setIsPlaying] = useState(false);
@@ -24,6 +25,9 @@ export default function ModulePage() {
   const [currentTime, setCurrentTime] = useState(0);
   const [playbackRate, setPlaybackRate] = useState(1);
   const [audioError, setAudioError] = useState(false);
+
+  const [audioSrc, setAudioSrc] = useState<string | null>(null);
+  const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement>(null);
   const { toast } = useToast();
@@ -34,6 +38,7 @@ export default function ModulePage() {
       setModuleData(data);
       setIsLoadingModule(false);
       // Reset audio state when slug changes
+      setAudioSrc(null);
       setIsPlaying(false);
       setCurrentTime(0);
       setDuration(0);
@@ -87,11 +92,11 @@ export default function ModulePage() {
       audio.removeEventListener('ended', handleEnded);
       audio.removeEventListener('error', handleError);
     };
-  }, [playbackRate, audioError, moduleData?.audioPath, toast]); 
+  }, [playbackRate, audioError, audioSrc, toast]); 
 
   const togglePlayPause = () => {
     const audio = audioRef.current;
-    if (audio && !audioError && moduleData?.audioPath) {
+    if (audio && !audioError && audioSrc) {
       if (isPlaying) {
         audio.pause();
       } else {
@@ -120,12 +125,37 @@ export default function ModulePage() {
   };
 
   const handleSeek = (value: number[]) => {
-    if (audioRef.current && !audioError && moduleData?.audioPath) {
+    if (audioRef.current && !audioError && audioSrc) {
         const newTime = value[0];
         audioRef.current.currentTime = newTime;
         setCurrentTime(newTime);
     }
   }
+
+  const handleGenerateAudio = async () => {
+    if (!moduleData || isGeneratingAudio) return;
+
+    setIsGeneratingAudio(true);
+    setAudioError(false);
+    toast({ title: 'Generating Audio...', description: 'Your AI narration is being created. Please wait.' });
+
+    try {
+        const fullText = moduleData.paragraphs.map(p => p.text).join('\n\n');
+        const result = await textToSpeech({ text: fullText });
+        setAudioSrc(result.audioDataUri);
+        toast({ title: 'Audio Generated!', description: 'Your narration is ready to play.' });
+    } catch (error) {
+        console.error('TTS Generation Error:', error);
+        setAudioError(true);
+        toast({
+            title: "Audio Generation Failed",
+            description: "Could not generate the audio narration. Please try again.",
+            variant: "destructive"
+        });
+    } finally {
+        setIsGeneratingAudio(false);
+    }
+  };
 
   if (isLoadingModule) {
     return (
@@ -162,12 +192,12 @@ export default function ModulePage() {
         <CardHeader>
           <CardTitle>Module Audio Player</CardTitle>
           <div className="p-4 rounded-lg bg-muted/50 mt-4">
-            {moduleData.audioPath ? (
+            {audioSrc ? (
               <>
                 <audio
-                  key={moduleData.audioPath}
+                  key={audioSrc}
                   ref={audioRef}
-                  src={moduleData.audioPath}
+                  src={audioSrc}
                   preload="metadata"
                 />
                 <div className="flex items-center gap-4">
@@ -203,14 +233,16 @@ export default function ModulePage() {
                 {audioError && (
                      <div className="mt-3 text-sm text-destructive flex items-center gap-2">
                         <AlertTriangle size={16} />
-                        <p>Audio file could not be played. It may be missing or corrupted.</p>
+                        <p>Audio file could not be played or generated.</p>
                     </div>
                 )}
               </>
             ) : (
                 <div className="flex items-center justify-center text-center gap-3 p-4">
-                    <VolumeX className="h-6 w-6 text-muted-foreground" />
-                    <p className="text-muted-foreground">Audio narration is not available for this module.</p>
+                    <Button onClick={handleGenerateAudio} disabled={isGeneratingAudio}>
+                        {isGeneratingAudio ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Wand2 className="mr-2 h-4 w-4" />}
+                        Generate AI Narration
+                    </Button>
                 </div>
             )}
           </div>
