@@ -1,7 +1,11 @@
 
 # LMDpro: AI eLearning Academy
 
-![LMDpro Dashboard Screenshot](/screenshots/dashboard.png)
+**Homepage:**
+
+![LMDpro Homepage Screenshot](docs/screenshots/homepage.png)
+    *The clean and modern landing page for LMDpro.*
+
 
 **LMDpro** is a modern, open-source, AI-powered learning platform designed to personalize and accelerate professional development. Leveraging cutting-edge AI, LMDpro provides tailored learning paths, automated content creation, an intelligent resume builder, and an interactive learning environment to help users achieve their career goals effectively.
 
@@ -20,16 +24,12 @@
 
 ## Screenshots
 
--   **Homepage:**
-    ![Homepage Screenshot](/screenshots/homepage.png)
-    *The clean and modern landing page for LMDpro.*
-
 -   **Dashboard:**
-    ![Dashboard Screenshot](/screenshots/dashboard.png)
+    ![Dashboard Screenshot](docs/screenshots/dashboard.png)
     *The clean and modern Dashboard page for LMDpro.*    
 
 -   **Course Catalog:**
-    ![Course Catalog Screenshot](/screenshots/catalog.png)
+    ![Course Catalog Screenshot](docs/screenshots/catalog.png)
     *Browse the extensive catalog of courses with advanced filtering.*
 
 ## Technology Stack
