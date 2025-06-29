@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { Play, Pause, Clock, FileQuestion, BookOpen, VolumeX, AlertTriangle, Loader2, Wand2 } from "lucide-react";
+import { Play, Pause, Clock, FileQuestion, BookOpen, VolumeX, AlertTriangle, Loader2 } from "lucide-react";
 import { modulesData } from '@/lib/modules-data';
 import { useToast } from '@/hooks/use-toast';
 import { textToSpeech } from '@/ai/flows/tts-flow';
@@ -45,6 +45,41 @@ export default function ModulePage() {
       setAudioError(false);
     }
   }, [slug]);
+
+  useEffect(() => {
+    const generateAudioForModule = async () => {
+        if (!moduleData || isGeneratingAudio || audioSrc) return; // Don't re-generate
+
+        setIsGeneratingAudio(true);
+        setAudioError(false);
+        toast({ title: 'Generating AI Narration...', description: 'Please wait while we create the audio for this module.' });
+
+        try {
+            const fullText = moduleData.paragraphs.map(p => p.text).join('\n\n');
+            if (!fullText.trim()) {
+              throw new Error("Module content is empty, cannot generate audio.");
+            }
+            const result = await textToSpeech({ text: fullText });
+            setAudioSrc(result.audioDataUri);
+            toast({ title: 'Audio Ready!', description: 'The narration for this module is ready to play.' });
+        } catch (error) {
+            console.error('TTS Generation Error:', error);
+            setAudioError(true);
+            toast({
+                title: "Audio Generation Failed",
+                description: "Could not generate the audio narration for this module.",
+                variant: "destructive"
+            });
+        } finally {
+            setIsGeneratingAudio(false);
+        }
+    };
+
+    if (moduleData && !audioSrc) {
+        generateAudioForModule();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [moduleData]); // Run only when moduleData changes
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -132,30 +167,68 @@ export default function ModulePage() {
     }
   }
 
-  const handleGenerateAudio = async () => {
-    if (!moduleData || isGeneratingAudio) return;
-
-    setIsGeneratingAudio(true);
-    setAudioError(false);
-    toast({ title: 'Generating Audio...', description: 'Your AI narration is being created. Please wait.' });
-
-    try {
-        const fullText = moduleData.paragraphs.map(p => p.text).join('\n\n');
-        const result = await textToSpeech({ text: fullText });
-        setAudioSrc(result.audioDataUri);
-        toast({ title: 'Audio Generated!', description: 'Your narration is ready to play.' });
-    } catch (error) {
-        console.error('TTS Generation Error:', error);
-        setAudioError(true);
-        toast({
-            title: "Audio Generation Failed",
-            description: "Could not generate the audio narration. Please try again.",
-            variant: "destructive"
-        });
-    } finally {
-        setIsGeneratingAudio(false);
+  const renderAudioPlayer = () => {
+    if (isGeneratingAudio) {
+        return (
+             <div className="flex items-center justify-center text-center gap-3 p-4">
+                <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
+                <p className="text-muted-foreground">Generating AI Narration...</p>
+            </div>
+        );
     }
-  };
+    if (audioError) {
+        return (
+            <div className="p-4 text-sm text-destructive flex items-center justify-center gap-2">
+                <AlertTriangle size={16} />
+                <p>Audio generation failed. Please try reloading the page.</p>
+            </div>
+        );
+    }
+    if (audioSrc) {
+        return (
+            <>
+                <audio
+                  key={audioSrc}
+                  ref={audioRef}
+                  src={audioSrc}
+                  preload="metadata"
+                />
+                <div className="flex items-center gap-4">
+                  <Button onClick={togglePlayPause} size="icon" className="rounded-full h-12 w-12 shrink-0" disabled={audioError}>
+                    {isPlaying ? <Pause className="h-6 w-6" /> : <Play className="h-6 w-6" />}
+                  </Button>
+                  <div className="flex-1 flex items-center gap-2">
+                      <span className="text-xs font-mono text-muted-foreground">{formatTime(currentTime)}</span>
+                      <Slider
+                        value={[currentTime]}
+                        max={duration || 100}
+                        step={1}
+                        onValueChange={handleSeek}
+                        disabled={duration === 0}
+                      />
+                      <span className="text-xs font-mono text-muted-foreground">{formatTime(duration)}</span>
+                  </div>
+                    <div className="flex items-center gap-2">
+                        <Clock className="h-4 w-4 text-muted-foreground" />
+                        <Select onValueChange={handlePlaybackRateChange} defaultValue="1.0">
+                              <SelectTrigger className="w-[80px]">
+                                <SelectValue placeholder="Speed" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="0.5">0.5x</SelectItem>
+                                <SelectItem value="1.0">1.0x</SelectItem>
+                                <SelectItem value="1.5">1.5x</SelectItem>
+                                <SelectItem value="2.0">2.0x</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </div>
+              </>
+        );
+    }
+    return null; // Initial state before generation starts
+  }
+
 
   if (isLoadingModule) {
     return (
@@ -192,59 +265,7 @@ export default function ModulePage() {
         <CardHeader>
           <CardTitle>Module Audio Player</CardTitle>
           <div className="p-4 rounded-lg bg-muted/50 mt-4">
-            {audioSrc ? (
-              <>
-                <audio
-                  key={audioSrc}
-                  ref={audioRef}
-                  src={audioSrc}
-                  preload="metadata"
-                />
-                <div className="flex items-center gap-4">
-                  <Button onClick={togglePlayPause} size="icon" className="rounded-full h-12 w-12 shrink-0" disabled={audioError}>
-                    {audioError ? <VolumeX className="h-6 w-6"/> : (isPlaying ? <Pause className="h-6 w-6" /> : <Play className="h-6 w-6" />)}
-                  </Button>
-                  <div className="flex-1 flex items-center gap-2">
-                      <span className="text-xs font-mono text-muted-foreground">{formatTime(currentTime)}</span>
-                      <Slider
-                        value={[currentTime]}
-                        max={duration || 100}
-                        step={1}
-                        onValueChange={handleSeek}
-                        disabled={audioError || duration === 0}
-                      />
-                      <span className="text-xs font-mono text-muted-foreground">{formatTime(duration)}</span>
-                  </div>
-                    <div className="flex items-center gap-2">
-                        <Clock className="h-4 w-4 text-muted-foreground" />
-                        <Select onValueChange={handlePlaybackRateChange} defaultValue="1.0" disabled={audioError}>
-                              <SelectTrigger className="w-[80px]">
-                                <SelectValue placeholder="Speed" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="0.5">0.5x</SelectItem>
-                                <SelectItem value="1.0">1.0x</SelectItem>
-                                <SelectItem value="1.5">1.5x</SelectItem>
-                                <SelectItem value="2.0">2.0x</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                </div>
-                {audioError && (
-                     <div className="mt-3 text-sm text-destructive flex items-center gap-2">
-                        <AlertTriangle size={16} />
-                        <p>Audio file could not be played or generated.</p>
-                    </div>
-                )}
-              </>
-            ) : (
-                <div className="flex items-center justify-center text-center gap-3 p-4">
-                    <Button onClick={handleGenerateAudio} disabled={isGeneratingAudio}>
-                        {isGeneratingAudio ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Wand2 className="mr-2 h-4 w-4" />}
-                        Generate AI Narration
-                    </Button>
-                </div>
-            )}
+            {renderAudioPlayer()}
           </div>
         </CardHeader>
         <CardContent className="flex-1 overflow-hidden">
