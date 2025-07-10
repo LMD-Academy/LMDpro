@@ -1,14 +1,14 @@
 
-import type {NextConfig} from 'next';
+import type { NextConfig } from 'next'
+import bundleAnalyzer from '@next/bundle-analyzer'
+
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env['ANALYZE'] === 'true',
+})
 
 const nextConfig: NextConfig = {
-  /* Production-ready configuration */
   images: {
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'placehold.co',
-      },
       {
         protocol: 'https',
         hostname: 'images.unsplash.com',
@@ -20,10 +20,14 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'lmdpro.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
       }
     ],
     formats: ['image/avif', 'image/webp'],
-    minimumCacheTTL: 60,
+    minimumCacheTTL: 3600,
   },
   // Production optimizations
   poweredByHeader: false,
@@ -87,13 +91,42 @@ const nextConfig: NextConfig = {
   
   // Performance optimizations
   experimental: {
-    // Disabled temporarily for build
-    // optimizeCss: true,
+    optimizeCss: true,
     scrollRestoration: true,
   },
   
-  // Enable standalone output for Docker
-  output: 'standalone',
+  // Turbopack configuration (stable)
+  turbopack: {
+    rules: {
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js',
+      },
+    },
+  },
+  
+  // External packages for server components
+  serverExternalPackages: ['@genkit-ai/googleai', 'genkit'],
+  
+  // Bundle analyzer
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        fs: false,
+        net: false,
+        tls: false,
+      };
+    }
+    return config;
+  },
+  
+  // Compiler optimizations
+  compiler: {
+    removeConsole: process.env['NODE_ENV'] === 'production',
+  },
+  
+  // Enable standalone output for Docker (disabled for local development)
+  // output: 'standalone',
 };
 
-export default nextConfig;
+export default withBundleAnalyzer(nextConfig);

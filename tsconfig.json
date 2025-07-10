@@ -1,10 +1,10 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES2022",
     "lib": [
       "dom",
       "dom.iterable",
-      "esnext"
+      "ES2022"
     ],
     "allowJs": true,
     "skipLibCheck": true,
@@ -17,6 +17,15 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "forceConsistentCasingInFileNames": true,
+    "exactOptionalPropertyTypes": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "plugins": [
       {
         "name": "next"
@@ -34,9 +43,9 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/Study/EducationalMaterial/Quizzes/04_Advanced_Leadership_Theories_for_Navigating_Ambiguity_Quiz.md",
-    "src/Study/EducationalMaterial/Quizzes/05_Corporate_Governance_Ethical_Leadership_at_Senior_Levels_Quiz.md",
-    "src/types/wav.d.ts"
+    "auth.ts",
+    "auth.config.ts",
+    "middleware.ts"
   ],
   "exclude": [
     "node_modules"
