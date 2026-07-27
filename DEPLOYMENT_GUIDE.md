@@ -2,7 +2,7 @@
 
 ## 🚀 Your LMDpro app is now ready for production deployment!
 
-The build has been successfully completed. Follow this guide to deploy your app to www.lmdpro.com.
+The build has been successfully completed. Follow this guide to deploy your app to www.lmdpro.app
 
 ## Deployment Options
 
