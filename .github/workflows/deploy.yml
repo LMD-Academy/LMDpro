@@ -51,11 +51,20 @@ jobs:
           NEXT_PUBLIC_SITE_URL: https://${{ github.repository_owner }}.github.io/LMDpro
           NODE_ENV: production
 
+      - name: 🔎 Verify artifact path (debug)
+        run: |
+          echo "Listing .next folder for debug:"
+          ls -al .next || true
+          echo "Listing .next/standalone for debug:"
+          ls -al .next/standalone || true
+          echo "Listing .next/standalone/public (artifact path):"
+          ls -al .next/standalone/public || true
+
       - name: 📄 Setup Pages
         uses: actions/configure-pages@v4
 
       - name: 📤 Upload artifacts
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v4
         with:
           path: '.next/standalone/public'
 
